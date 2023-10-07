@@ -13,14 +13,12 @@ class SplashView extends StatelessWidget {
     });
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand, // Para que la imagen ocupe toda la pantalla
+        fit: StackFit.expand,
         children: [
-          // Agrega la imagen como fondo
           Image.asset(
-            'assets/images/Inicio.png', // Reemplaza con la ruta de tu imagen
-            fit: BoxFit.cover, // Para que la imagen se ajuste a la pantalla
+            'assets/images/Inicio.png',
+            fit: BoxFit.cover,
           ),
-          // Agrega un contenedor para el texto centrado en la parte superior
         ],
       ),
     );
