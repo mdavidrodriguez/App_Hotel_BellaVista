@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
-import 'package:hotel_bella_vista/ui/pages/Login/widgets/social.login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({super.key});
+class Register extends StatelessWidget {
+  Register({super.key});
+  final TextEditingController identificacionController =
+      TextEditingController();
+  final TextEditingController nombreController = TextEditingController();
+  final TextEditingController apellidoController = TextEditingController();
+  final TextEditingController telefonoController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -17,7 +21,7 @@ class LoginView extends StatelessWidget {
         child: SafeArea(
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -35,10 +39,10 @@ class LoginView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 30,
                 ),
                 Text(
-                  'Login to your Account',
+                  'Create your Account',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: GlobalColors.textColor,
@@ -50,28 +54,56 @@ class LoginView extends StatelessWidget {
                 ),
                 // Campo email
                 TextFormGlobal(
-                  controller: emailController,
-                  text: 'Email',
+                  controller: identificacionController,
+                  text: 'Identificación',
                   obscure: false,
-                  textInputType: TextInputType.emailAddress,
+                  textInputType: TextInputType.number,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 // Password input
                 TextFormGlobal(
+                    controller: nombreController,
+                    text: 'Nombre',
+                    textInputType: TextInputType.text,
+                    obscure: false),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormGlobal(
+                    controller: apellidoController,
+                    text: 'Apellido',
+                    textInputType: TextInputType.text,
+                    obscure: false),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormGlobal(
+                    controller: telefonoController,
+                    text: 'Telefono',
+                    textInputType: TextInputType.number,
+                    obscure: false),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormGlobal(
+                    controller: emailController,
+                    text: 'Email',
+                    textInputType: TextInputType.emailAddress,
+                    obscure: false),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormGlobal(
                     controller: passwordController,
-                    text: 'Password',
+                    text: 'Contraseña',
                     textInputType: TextInputType.text,
                     obscure: true),
                 const SizedBox(
                   height: 10,
                 ),
                 const ButtonGlobal(),
-                const SizedBox(
-                  height: 25,
-                ),
-                const SocialLogin(),
                 const SizedBox(height: 30),
                 const BotonNavigation(),
               ],
@@ -97,17 +129,16 @@ class BotonNavigation extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('No tienes cuenta? '),
+          const Text('Ya tienes Cuenta?'),
           InkWell(
             child: TextButton(
-              onPressed: () {
-                Get.toNamed('/register');
-              },
-              child: Text(
-                ' Sign Up ',
-                style: TextStyle(color: GlobalColors.maincolor),
-              ),
-            ),
+                onPressed: () {
+                  Get.toNamed('/login');
+                },
+                child: Text(
+                  ' Sign In ',
+                  style: TextStyle(color: GlobalColors.textColor),
+                )),
           )
         ],
       ),
