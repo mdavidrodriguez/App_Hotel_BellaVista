@@ -16,7 +16,12 @@ class Home extends StatelessWidget {
                 onPressed: () {
                   Get.toNamed('/login');
                 },
-                child: const Text('Iniciar sesión'))
+                child: const Text('Iniciar sesión')),
+            ElevatedButton(
+              onPressed: (){
+                Get.toNamed('/panel');
+            }, 
+              child: const Text("Panel"))
           ],
         ),
       ),
