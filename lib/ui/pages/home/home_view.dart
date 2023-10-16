@@ -1,11 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_texts.dart';
 import 'package:hotel_bella_vista/config/theme/color_styles.dart';
 import 'package:hotel_bella_vista/config/theme/text_styles.dart';
-import 'package:hotel_bella_vista/extractButton/custom_button.dart';
-import 'package:hotel_bella_vista/extractButton/custom_button1.dart';
 import 'package:hotel_bella_vista/widgets/corusel.dart';
 
 class HomeView extends StatefulWidget {
@@ -24,7 +21,13 @@ class _HomeViewState extends State<HomeView> {
   double minimalPrice = 100.000;
   String priceForIt = "Starting from";
   String description = "Comodidad";
-  List<String> peculiarities = ["Peculiarity 1", "Peculiarity 2"];
+
+  final TextStyle kvyboruStyle = const TextStyle(
+    color: Colors.white,
+    fontSize: 16,
+    fontFamily: 'SF Pro Display',
+    fontWeight: FontWeight.w500,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -52,37 +55,56 @@ class _HomeViewState extends State<HomeView> {
               const SizedBox(
                 height: 10,
               ),
-              ServiciosList(
-                  peculiarities: peculiarities, description: description),
-              const SizedBox(
-                height: 10,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff0D72FF),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    child: Text(
+                      "Elige una Habitacion",
+                      style: kvyboruStyle,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ElevatedButton.icon(
+                      onPressed: () {
+                        Get.toNamed('/login');
+                      },
+                      icon: const Icon(Icons.login),
+                      label: const Text('Iniciar Sesion'))
+                ]),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: AppColors.white,
-                ),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: CustomButton1(
-                        text: AppTexts.kvyboru,
-                        onTap: () {},
-                        style: TextStyles.kvyboru,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                ),
+              const SizedBox(
+                height: 15,
               ),
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.room_service), label: 'Servicios'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.meeting_room), label: 'Habitaciones'),
+        ],
+        onTap: (int index) {
+          if (index == 0) {
+            Get.toNamed('/home');
+          } else if (index == 1) {
+            print('Servicios');
+            //  Get.toNamed('/panel');
+          } else if (index == 2) {
+            Get.toNamed('/panel');
+          }
+        },
       ),
     );
   }
@@ -184,85 +206,6 @@ class VistaImages extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ServiciosList extends StatelessWidget {
-  const ServiciosList({
-    super.key,
-    required this.peculiarities,
-    required this.description,
-  });
-
-  final List<String> peculiarities;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: AppColors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(AppTexts.obOtel, style: TextStyles.makadi),
-            const SizedBox(
-              height: 10,
-            ),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: peculiarities.map((e) {
-                return Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.grey1,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(e, style: TextStyles.turStyle),
-                );
-              }).toList(),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(description, style: TextStyles.information),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomButton(
-              text: AppTexts.udobstva,
-              image: Image.asset('assets/emojihappy.png'),
-            ),
-            const Divider(
-              indent: 20,
-              endIndent: 30,
-              color: Color(0xffE9EAED),
-            ),
-            CustomButton(
-              text: AppTexts.vklycheno,
-              image: Image.asset('assets/ticksquare.png'),
-            ),
-            const Divider(
-              indent: 20,
-              endIndent: 30,
-              color: Color(0xffE9EAED),
-            ),
-            CustomButton(
-              text: AppTexts.neVklycheno,
-              image: Image.asset('assets/closesquare.png'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
       ),
     );
   }

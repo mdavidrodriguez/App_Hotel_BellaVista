@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:hotel_bella_vista/ui/pages/home/home.dart';
-import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
+// import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
 
 class SplashView extends StatelessWidget {
   const SplashView({super.key});
@@ -10,7 +10,7 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2), () {
-      Get.to(const HomeView());
+      Get.toNamed('/home');
     });
     return Scaffold(
       body: Stack(
