@@ -133,7 +133,7 @@ class BotonNavigation extends StatelessWidget {
           InkWell(
             child: TextButton(
                 onPressed: () {
-                  Get.toNamed('/login');
+                  Navigator.pop(context);
                 },
                 child: Text(
                   ' Sign In ',

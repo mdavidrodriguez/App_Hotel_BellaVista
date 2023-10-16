@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
+import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/social.login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
@@ -101,7 +102,8 @@ class BotonNavigation extends StatelessWidget {
           InkWell(
             child: TextButton(
               onPressed: () {
-                Get.toNamed('/register');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Register()));
               },
               child: Text(
                 ' Sign Up ',
