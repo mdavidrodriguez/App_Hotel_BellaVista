@@ -31,6 +31,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.white,
@@ -61,7 +62,7 @@ class _HomeViewState extends State<HomeView> {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff0D72FF),
+                        backgroundColor: colors.primary,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     child: Text(
@@ -77,7 +78,9 @@ class _HomeViewState extends State<HomeView> {
                         Get.toNamed('/login');
                       },
                       icon: const Icon(Icons.login),
-                      label: const Text('Iniciar Sesion'))
+                      label: const Text(
+                        'Iniciar Sesion',
+                      ))
                 ]),
               ),
               const SizedBox(
