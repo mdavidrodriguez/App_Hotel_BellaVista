@@ -8,22 +8,9 @@ class PanelView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
-      
-        body: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(150.0),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Spacer(),
-            RoomCard(),
-            Spacer()
-          ],
-              ),
+        appBar: AppBar(
+          title: const Text('Cards'),
         ),
-      
-    );
-
+        body: const CardsView());
   }
 }
