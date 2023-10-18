@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Register(),
         '/panel': (context) => const PanelView(),
         '/room/register': (context) => const RoomRegister(),
-        '/reservation/register': (context) => const ReservasRegister()
+        '/reservation/register': (context) => const ReservasRegister(),
       },
     );
   }
