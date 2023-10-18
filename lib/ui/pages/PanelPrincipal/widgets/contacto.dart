@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-
-
-class ReservationCard extends StatelessWidget {
-  const ReservationCard({super.key});
+class Contacto extends StatelessWidget {
+  const Contacto({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +9,9 @@ class ReservationCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/reservation/register');
+        Navigator.pushNamed(context, '/room/register');
       },
-      onHover: (value) => const Text("Habitaciones"),
+      onHover: (value) => const Text("Contacto"),
       child: Center(
         child: Card(
           clipBehavior: Clip.hardEdge,
@@ -29,9 +27,10 @@ class ReservationCard extends StatelessWidget {
           child: Stack(
             children: [
               Image.asset(
-                'assets/images/reserva-legal.png',
+                'assets/images/contacto.jpeg',
                 fit: BoxFit.cover,
                 width: 300,
+                height: 250,
               ),
             ],
           ),

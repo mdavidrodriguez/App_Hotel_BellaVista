@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/contacto.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/reservation_card.dart';
 
 class CardsView extends StatelessWidget {
@@ -6,57 +7,46 @@ class CardsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    final colors = Theme.of(context).colorScheme;
+    return SingleChildScrollView(
       child: Column(
         children: [
-          RoomCard(),
-          SizedBox(
+          const RoomCard(),
+          TextEncabezados(
+              texto: Text(
+            "HABITACIONES",
+            style: TextStyle(
+                color: Colors.white,
+                backgroundColor: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700),
+          )),
+          const SizedBox(
             height: 10,
           ),
-          RoomCard(),
-          SizedBox(
+          const ReservationCard(),
+          TextEncabezados(
+              texto: Text(
+            "RESERVAS",
+            style: TextStyle(
+                color: Colors.white,
+                backgroundColor: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700),
+          )),
+          const SizedBox(
             height: 10,
           ),
-          ReservationCard(),
-          SizedBox(
-            height: 10,
-          ),
-          ReservationCard(),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 50,
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class CardsView extends StatelessWidget {
-  const CardsView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Column(
-        children: [
-          RoomCard(),
-          SizedBox(
-            height: 10,
-          ),
-          RoomCard(),
-          SizedBox(
-            height: 10,
-          ),
-          RoomCard(),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 50,
-          )
+          const Contacto(),
+          TextEncabezados(
+              texto: Text(
+            "CONTACTO",
+            style: TextStyle(
+                color: Colors.white,
+                backgroundColor: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700),
+          )),
         ],
       ),
     );
@@ -93,8 +83,36 @@ class RoomCard extends StatelessWidget {
                 'assets/images/room.jpeg',
                 fit: BoxFit.cover,
                 width: 300,
+                height: 250,
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TextEncabezados extends StatelessWidget {
+  const TextEncabezados({super.key, required this.texto});
+  final Text texto;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: FractionallySizedBox(
+        widthFactor: 0.8,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            color: colors.primary,
+            padding: const EdgeInsets.all(8),
+            child: Align(
+              alignment: Alignment.center,
+              child: texto,
+            ),
           ),
         ),
       ),
