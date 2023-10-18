@@ -1,4 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/reservation_card.dart';
+
+class CardsView extends StatelessWidget {
+  const CardsView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
+      child: Column(
+        children: [
+          RoomCard(),
+          SizedBox(
+            height: 10,
+          ),
+          RoomCard(),
+          SizedBox(
+            height: 10,
+          ),
+          ReservationCard(),
+          SizedBox(
+            height: 10,
+          ),
+          ReservationCard(),
+          SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: 50,
+          )
+        ],
+      ),
+    );
+  }
+}
 
 class CardsView extends StatelessWidget {
   const CardsView({super.key});
