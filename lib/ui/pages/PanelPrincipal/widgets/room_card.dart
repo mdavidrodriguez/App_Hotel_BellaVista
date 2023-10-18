@@ -1,50 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/reservation_card.dart';
+
+class CardsView extends StatelessWidget {
+  const CardsView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
+      child: Column(
+        children: [
+          RoomCard(),
+          SizedBox(
+            height: 10,
+          ),
+          RoomCard(),
+          SizedBox(
+            height: 10,
+          ),
+          ReservationCard(),
+          SizedBox(
+            height: 10,
+          ),
+          ReservationCard(),
+          SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: 50,
+          )
+        ],
+      ),
+    );
+  }
+}
 
 class RoomCard extends StatelessWidget {
   const RoomCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-  onTap: () {
-    // Navegar a la otra ruta cuando se presiona la tarjeta
-    Navigator.pushNamed(context, '/room/register');
-  },
-  onHover: (value) => const Text("Habitaciones"),
-  child: Card(
-    
-    elevation: 5,
-    shape: RoundedRectangleBorder(
-      side: BorderSide(
-        color: Theme.of(context).colorScheme.outline,
-      ),
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-    ),
-    margin: EdgeInsets.zero,
- 
-    child: SizedBox(
-      
-      height: MediaQuery.of(context).size.height * 0.400,
-      
-      child: Container(
+    final colors = Theme.of(context).colorScheme;
 
-        alignment: Alignment.center,
-        
-        
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.asset('../../../../../assets/images/room.png',height: 400,),
-          
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/room/register');
+      },
+      onHover: (value) => const Text("Habitaciones"),
+      child: Center(
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          color: colors.surface,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.outline,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
-        
+          margin: EdgeInsets.zero,
+          child: Stack(
+            children: [
+              Image.asset(
+                '../../../../../assets/images/room.png',
+                fit: BoxFit.cover,
+                width: 300,
+              ),
+            ],
+          ),
+        ),
       ),
-      
-      
-    ),
-    
-    
-    
-  ),
-);
+    );
   }
 }
