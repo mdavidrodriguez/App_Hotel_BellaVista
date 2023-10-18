@@ -9,7 +9,7 @@ class Contacto extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/room/register');
+        Navigator.pushNamed(context, '/contacto');
       },
       onHover: (value) => const Text("Contacto"),
       child: Center(

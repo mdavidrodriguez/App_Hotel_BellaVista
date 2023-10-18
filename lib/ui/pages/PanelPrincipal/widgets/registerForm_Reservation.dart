@@ -89,7 +89,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                 TextField(
                   controller: dateOfInput,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today_rounded),
+                    icon: const Icon(Icons.calendar_today_rounded),
                     labelText: "Fecha de Entrada",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
