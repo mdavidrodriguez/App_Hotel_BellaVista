@@ -12,12 +12,7 @@
           "package_name": "com.movilmsb.hotel_bella_vista"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "942578221527-k132tqvvtpub7pa53temevqceqlukhc6.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyDtN-GxBaNJQZgtYkm1YqeMLChsSeJI6kk"
@@ -25,12 +20,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "942578221527-k132tqvvtpub7pa53temevqceqlukhc6.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

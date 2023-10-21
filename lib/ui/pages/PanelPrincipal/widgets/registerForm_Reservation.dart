@@ -116,8 +116,9 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: dateOfOutput,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today_rounded),
+                    icon: const Icon(Icons.calendar_today_rounded),
                     labelText: "Fecha de Salida",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -136,9 +137,9 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                     print("time: $pickedTime2");
                     if (pickedTime2 != null) {
                       setState(() {
-                        dateOfInput.text =
+                        dateOfOutput.text =
                             formatDate(pickedTime2, [dd, '-', mm, '-', yyyy]);
-                        print("Variable: $dateOfInput");
+                        print("Variable: $dateOfOutput");
                       });
                     }
                   },

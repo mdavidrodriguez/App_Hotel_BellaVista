@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/ui/app.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
-}
+runApp(const MyApp());
+} 
+
