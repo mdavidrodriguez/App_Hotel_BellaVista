@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/contacto.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/reservacionesUser.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/reservation_card.dart';
 
 class CardsView extends StatelessWidget {
@@ -28,6 +29,19 @@ class CardsView extends StatelessWidget {
           TextEncabezados(
               texto: Text(
             "RESERVAS",
+            style: TextStyle(
+                color: Colors.white,
+                backgroundColor: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700),
+          )),
+          const SizedBox(
+            height: 10,
+          ),
+          const ReservacionesUser(),
+          TextEncabezados(
+              texto: Text(
+            "RESERVACIONES",
             style: TextStyle(
                 color: Colors.white,
                 backgroundColor: colors.primary,
