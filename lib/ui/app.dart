@@ -11,7 +11,6 @@ import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/registerForm_r
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/servicioCliente.dart';
 import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart';
 import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
-import 'package:hotel_bella_vista/ui/pages/perfil/menuPerfil.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
         '/room/register': (context) => const RoomRegister(),
         '/reservation/register': (context) => const ReservasRegister(),
         '/contacto': (context) => const ContactScreen(),
-        '/profile': (context) => const ProfileScreen(),
         '/reservationAdmin': (context) => const ReservationScreen(),
         '/reservashelf': (context) => ReservaShelf(),
       },
