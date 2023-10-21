@@ -1,47 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
+import 'package:hotel_bella_vista/ui/pages/habitacion/detalle_habitacion_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  final List<HabitacionHotel> _habitaciones = [
-    HabitacionHotel(
-      id: 1,
-      numeroHabitacion: '12',
-      tipoHabitacion: 'Premium',
-      precioPorNoche: 30000,
-      descripcion: 'Comoda y amplia',
-      capacidad: 12,
-      estaDisponible: true,
-      imagenes: ['assets/otel.png'],
-      comodidades: ['Baño', 'Amplia', 'Aire'],
-    ),
-    HabitacionHotel(
-      id: 2,
-      numeroHabitacion: '13',
-      tipoHabitacion: 'Premium',
-      precioPorNoche: 30000,
-      descripcion: 'Comoda y amplia',
-      capacidad: 12,
-      estaDisponible: true,
-      imagenes: ['assets/image.png'],
-      comodidades: ['Baño', 'Amplia', 'Aire'],
-    )
-  ];
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<HabitacionHotel> _habitaciones = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getLastHabitaciones();
+  }
+
+  void _getLastHabitaciones() async {
+    var lastHabitaciones = await HabitacionesService().getLastHabitaciones();
+    setState(() {
+      _habitaciones = lastHabitaciones;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    var showProgress = _habitaciones.isEmpty;
+    var listLenght = showProgress ? 2 : _habitaciones.length + 1;
     return Container(
       margin: const EdgeInsets.all(10),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
-          itemCount: _habitaciones.length + 1,
+          itemCount: listLenght,
           itemBuilder: (context, index) {
             if (index == 0) {
               return const HeaderWidget();
             }
+            if (showProgress) {
+              return const Center(child: CircularProgressIndicator());
+            }
             final habitacion = _habitaciones[index - 1];
+
             return Card(
               child: InkWell(
                 borderRadius: BorderRadius.circular(4.0),
@@ -99,6 +102,11 @@ class HomeScreen extends StatelessWidget {
   void _openHabitacionDetails(
       BuildContext context, HabitacionHotel habitacion) {
     // Aquí puedes abrir los detalles de la habitación
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                HabitacionDetailsScreen(habitacion: habitacion)));
   }
 }
 

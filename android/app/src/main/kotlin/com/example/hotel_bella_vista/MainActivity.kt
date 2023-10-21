@@ -1,4 +1,4 @@
-package com.example.hotel_bella_vista
+package com.movilmsb.hotel_bella_vista
 
 import io.flutter.embedding.android.FlutterActivity
 
