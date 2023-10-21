@@ -7,10 +7,6 @@ class PanelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Cards'),
-        ),
-        body: const CardsView());
+    return Scaffold(body: const CardsView());
   }
 }
