@@ -14,9 +14,7 @@ class HabitacionDetailsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HabitacionCoverWidget(
-              coverUrl: habitacion.imagenes[0],
-            ),
+            HabitacionCoverWidget(coverUrl: habitacion.imagenes),
             HabitacionInfoWidget(
                 tipohabitacion:
                     "Tipo de habitación: ${habitacion.tipoHabitacion}",
@@ -26,7 +24,7 @@ class HabitacionDetailsScreen extends StatelessWidget {
                     "Precio por Noche: ${habitacion.precioPorNoche.toString()}",
                 numeroHabitacion:
                     "Numero de habitación: ${habitacion.numeroHabitacion}",
-                comodidades: "Comodidades: ${habitacion.comodidades[0]}",
+                comodidades: "Comodidades: ${habitacion.comodidades}",
                 descripcion: "Descripción: ${habitacion.descripcion}"),
             ElevatedButton(onPressed: () {}, child: const Text("Agregar"))
           ],

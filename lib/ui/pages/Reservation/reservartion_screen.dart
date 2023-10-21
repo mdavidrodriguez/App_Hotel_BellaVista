@@ -95,4 +95,13 @@ class ReservationGrid extends StatelessWidget {
   }
 
   void _navigateToReserva() {}
+
+}
+class Myhabitacion extends StatelessWidget {
+  const Myhabitacion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
 }

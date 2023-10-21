@@ -12,43 +12,33 @@ class ReservaShelf extends StatelessWidget {
       descripcion: 'Comoda y amplia',
       capacidad: 12,
       estaDisponible: true,
-      imagenes: ['assets/otel.png'],
-      comodidades: ['Baño', 'Amplia', 'Aire'],
+      imagenes: 'assets/images/room.jpeg',
+      comodidades: '',
     ),
     HabitacionHotel(
-      id: "2",
-      numeroHabitacion: '13',
+      id: "1",
+      numeroHabitacion: '12',
       tipoHabitacion: 'Premium',
       precioPorNoche: 30000,
       descripcion: 'Comoda y amplia',
       capacidad: 12,
       estaDisponible: true,
-      imagenes: ['assets/image.png'],
-      comodidades: ['Baño', 'Amplia', 'Aire'],
+      imagenes: 'assets/image.png',
+      comodidades: '',
     ),
     HabitacionHotel(
-      id: "3",
-      numeroHabitacion: '13',
+      id: "1",
+      numeroHabitacion: '12',
       tipoHabitacion: 'Premium',
       precioPorNoche: 30000,
       descripcion: 'Comoda y amplia',
       capacidad: 12,
       estaDisponible: true,
-      imagenes: ['assets/image.png'],
-      comodidades: ['Baño', 'Amplia', 'Aire'],
+      imagenes: 'assets/images/room.jpeg',
+      comodidades: '',
     ),
-    HabitacionHotel(
-      id: "4",
-      numeroHabitacion: '13',
-      tipoHabitacion: 'Premium',
-      precioPorNoche: 30000,
-      descripcion: 'Comoda y amplia',
-      capacidad: 12,
-      estaDisponible: true,
-      imagenes: ['assets/image.png'],
-      comodidades: ['Baño', 'Amplia', 'Aire'],
-    )
   ];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +73,7 @@ class ReservaShelf extends StatelessWidget {
                 onTap: () {},
                 child: Ink.image(
                     fit: BoxFit.fitHeight,
-                    image: AssetImage(_habitaciones[index].imagenes[0])));
+                    image: AssetImage(_habitaciones[index].imagenes)));
           },
         ),
       ),

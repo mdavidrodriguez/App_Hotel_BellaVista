@@ -27,4 +27,26 @@ class HabitacionesService {
     }
     throw const HttpException('habitacion not found');
   }
+
+  void saveHabitacion(
+      String nrohabitacion,
+      String tipoHabitacion,
+      double precioNoche,
+      String descripcion,
+      int capacidad,
+      bool disponible,
+      String comodidades) async {
+    var reference = FirebaseFirestore.instance.collection("habitaciones");
+    var result = await reference.add({
+      'numeroHabitacion': nrohabitacion,
+      'tipoHabitacion': tipoHabitacion,
+      'precioPorNoche': precioNoche,
+      'descripcion': descripcion,
+      'capacidad': capacidad,
+      'estaDisponible': disponible,
+      'comodidades': comodidades
+    });
+    return Future.value(result.id);
+}
+
 }

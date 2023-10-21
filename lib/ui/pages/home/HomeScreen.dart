@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: [
                     Image.asset(
-                      habitacion.imagenes[0],
+                      habitacion.imagenes,
                       height: 150,
                       width: 150,
                     ),
