@@ -12,7 +12,7 @@ class HabitacionesService {
           toFirestore: (habit, _) => habit.toJson());
 
   Future<List<HabitacionHotel>> getLastHabitaciones() async {
-    var resultado = await habiRef.limit(2).get().then((value) => value);
+    var resultado = await habiRef.limit(4).get().then((value) => value);
     List<HabitacionHotel> habitaciones = [];
     for (var doc in resultado.docs) {
       habitaciones.add(doc.data());
@@ -47,6 +47,5 @@ class HabitacionesService {
       'comodidades': comodidades
     });
     return Future.value(result.id);
-}
-
+  }
 }

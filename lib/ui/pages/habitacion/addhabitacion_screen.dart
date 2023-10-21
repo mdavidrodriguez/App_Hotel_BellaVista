@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
 
 class AddHabitacionScreen extends StatelessWidget {
-  const AddHabitacionScreen({Key? key});
+  const AddHabitacionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class AddHabitacionScreen extends StatelessWidget {
 }
 
 class AddHabitacionForm extends StatefulWidget {
-  const AddHabitacionForm({Key? key});
+  const AddHabitacionForm({super.key});
 
   @override
   State<AddHabitacionForm> createState() => _AddHabitacionFormState();
@@ -33,75 +33,127 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextFormField(
-            controller: nrohabitextController,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Numero de Habitación',
+    return Scaffold(
+      body: Stack(children: [
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/fondo.jpeg'),
+              fit: BoxFit.cover,
             ),
           ),
-          TextFormField(
-            controller: tipohabTextController,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Tipo Habitacion',
-            ),
-          ),
-          TextFormField(
-            controller: preciNocheTextController,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Precio Por Noche',
-            ),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          ),
-          TextFormField(
-            controller: descripcionTextController,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Descripción ',
-            ),
-          ),
-          TextFormField(
-            controller: capacidadTextController,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Capacidad ',
-            ),
-            keyboardType: TextInputType.number, // Accepts int
-          ),
-          Row(
-            children: [
-              const Text('Disponible:'),
-              Switch(
-                value: isDisponible,
-                onChanged: (value) {
-                  setState(() {
-                    isDisponible = value;
-                  });
-                },
+        ),
+        SingleChildScrollView(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: nrohabitextController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Numero de Habitación',
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: tipohabTextController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText: 'Tipo Habitacion',
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: preciNocheTextController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText: 'Precio Por Noche',
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: descripcionTextController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText: 'Descripción ',
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: capacidadTextController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText: 'Capacidad ',
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    keyboardType: TextInputType.number, // Accepts int
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: comodidadesTextController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText: 'Comodidades ',
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Text('Disponible:'),
+                      Switch(
+                        value: isDisponible,
+                        onChanged: (value) {
+                          setState(() {
+                            isDisponible = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      saveHabitacion();
+                    },
+                    child: const Text('Guardar'),
+                  ),
+                ],
               ),
-            ],
-          ),
-          TextFormField(
-            controller: comodidadesTextController,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Capacidad ',
             ),
-            keyboardType: TextInputType.number, // Accepts int
           ),
-          ElevatedButton(
-            onPressed: () {
-              saveHabitacion();
-            },
-            child: const Text('Guardar'),
-          ),
-        ],
+        ),
+      ]),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.arrow_back_ios_new_rounded),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

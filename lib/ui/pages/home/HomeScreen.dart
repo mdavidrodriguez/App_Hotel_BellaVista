@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var showProgress = _habitaciones.isEmpty;
-    var listLenght = showProgress ? 2 : _habitaciones.length + 1;
+    var listLenght = showProgress ? 5 : _habitaciones.length + 1;
     return Container(
       margin: const EdgeInsets.all(10),
       child: Padding(
