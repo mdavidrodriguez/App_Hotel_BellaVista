@@ -29,7 +29,11 @@ class MyApp extends StatelessWidget {
         '/panel': (context) => const PanelView(),
         '/room/register': (context) => const RoomRegister(),
         '/reservation/register': (context) => const ReservasRegister(),
+        '/contacto': (context) => const ContactScreen(),
+        '/reservationAdmin': (context) => const ReservationScreen(),
+        '/reservashelf': (context) => ReservaShelf(),
         '/contacto': (context) => const ContactScreen()
+
       },
     );
   }
