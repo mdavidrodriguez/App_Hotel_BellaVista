@@ -6,8 +6,8 @@ class HabitacionHotel {
   final String descripcion;
   final int capacidad;
   final bool estaDisponible;
-  final List<String> imagenes;
-  final List<String> comodidades;
+  final String imagenes;
+  final String comodidades;
 
   HabitacionHotel({
     required this.id,
@@ -30,11 +30,12 @@ class HabitacionHotel {
         capacidad = json["capacidad"] is int
             ? json["capacidad"]
             : json["capacidad"] is String
-                ? int.tryParse(json["capacidad"]) ?? 0
+                ? int.tryParse(json["capacidad"] as String) ?? 0
                 : 0,
         estaDisponible = json["estaDisponible"] as bool,
-        imagenes = List<String>.from(json["imagenes"] as List),
-        comodidades = List<String>.from(json["comodidades"] as List);
+        imagenes = json["imagenes"] ?? "assets/image.png",
+        comodidades = json["comodidades"] ??
+            "No hay"; 
 
   toJson() {
     throw UnimplementedError();
