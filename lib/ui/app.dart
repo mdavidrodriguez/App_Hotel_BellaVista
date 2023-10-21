@@ -5,9 +5,11 @@ import 'package:hotel_bella_vista/ui/pages/Login/login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/splash.view.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/pages/panel.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/listaReservas.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/registerForm_Reservation.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/registerForm_room.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/servicioCliente.dart';
+import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart';
 import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
 
 class MyApp extends StatelessWidget {
@@ -32,8 +34,6 @@ class MyApp extends StatelessWidget {
         '/contacto': (context) => const ContactScreen(),
         '/reservationAdmin': (context) => const ReservationScreen(),
         '/reservashelf': (context) => ReservaShelf(),
-        '/contacto': (context) => const ContactScreen()
-
       },
     );
   }
