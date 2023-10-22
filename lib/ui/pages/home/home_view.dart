@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/room_card.dart';
 import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart';
@@ -16,7 +17,7 @@ class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
   // ignore: prefer_final_fields
   static List<Widget> _sectionWidgets = [
-    HomeScreen(),
+    const HomeScreen(),
     ReservationGrid(),
     const CardsView()
   ];
@@ -32,6 +33,15 @@ class _HomeViewState extends State<HomeView> {
         elevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
+        actions: [
+          FloatingActionButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.login_outlined),
+          )
+        ],
       ),
       body: IndexedStack(
         index: _selectedIndex,

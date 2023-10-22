@@ -4,7 +4,9 @@ import 'package:hotel_bella_vista/domain/models/habitacion.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/detalle_habitacion_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
+
+
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

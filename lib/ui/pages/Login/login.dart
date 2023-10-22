@@ -1,14 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
+import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
-import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/social.login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  bool _isSingning = false;
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +85,12 @@ class LoginView extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                const ButtonGlobal(),
+                GestureDetector(
+                  child: FloatingActionButton(
+                    onPressed: sigIn,
+                    child: const Text('SignIn'),
+                  ),
+                ),
                 const SizedBox(
                   height: 25,
                 ),
@@ -80,6 +103,21 @@ class LoginView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void sigIn() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+
+    User? user = await _auth.singInWithAndPassword(email, password);
+
+    if (user != null) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, "/home");
+      print("User is signip");
+    } else {
+      print('Some error');
+    }
   }
 }
 
