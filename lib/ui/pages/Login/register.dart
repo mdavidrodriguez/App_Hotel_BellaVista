@@ -1,17 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
-import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
+import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   Register({super.key});
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   final TextEditingController identificacionController =
       TextEditingController();
+
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController apellidoController = TextEditingController();
   final TextEditingController telefonoController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    nombreController.dispose();
+    apellidoController.dispose();
+    telefonoController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +123,13 @@ class Register extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                const ButtonGlobal(),
+                GestureDetector(
+                  child: FloatingActionButton(
+                    onPressed: _signUp,
+                    child: const Text('Registrarse'),
+                  ),
+                ),
                 const SizedBox(height: 30),
-                const BotonNavigation(),
               ],
             ),
           ),
@@ -112,35 +137,31 @@ class Register extends StatelessWidget {
       ),
     );
   }
-}
 
-class BotonNavigation extends StatelessWidget {
-  const BotonNavigation({
-    super.key,
-  });
+  void _signUp() async {
+    String identificacion = identificacionController.text;
+    String username = nombreController.text;
+    String apellido = apellidoController.text;
+    String telefono = telefonoController.text;
+    String email = emailController.text;
+    String password = passwordController.text;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      color: Colors.white,
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('Ya tienes Cuenta?'),
-          InkWell(
-            child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  ' Sign In ',
-                  style: TextStyle(color: GlobalColors.textColor),
-                )),
-          )
-        ],
-      ),
-    );
+    User? user = await _auth.signupWithEmailAndPassword(email, password);
+
+    if (user != null) {
+      await _auth.storeUserDataInFirestore(
+        userId: user.uid,
+        identificacion: identificacion,
+        username: username,
+        apellido: apellido,
+        telefono: telefono,
+        email: email,
+      );
+
+      Navigator.pushNamed(context, "/home");
+      print("User is successfully created");
+    } else {
+      print('Some error');
+    }
   }
 }

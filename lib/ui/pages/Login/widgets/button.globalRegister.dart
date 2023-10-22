@@ -9,6 +9,7 @@ class ButtonRegister extends StatelessWidget {
     return InkWell(
       onTap: () {
         // ignore: avoid_print
+      
         print('Registro');
       },
       child: Container(
