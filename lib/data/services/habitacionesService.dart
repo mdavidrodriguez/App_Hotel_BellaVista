@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
 
 class HabitacionesService {
@@ -28,7 +31,7 @@ class HabitacionesService {
     throw const HttpException('habitacion not found');
   }
 
-  void saveHabitacion(
+  Future<String> saveHabitacion(
       String nrohabitacion,
       String tipoHabitacion,
       double precioNoche,
@@ -47,5 +50,37 @@ class HabitacionesService {
       'comodidades': comodidades
     });
     return Future.value(result.id);
+  }
+
+  Future<String?> uploapHabitacionCover(
+      String imagePath, String newHabitacionId) async {
+    try {
+      File image = File(imagePath);
+      final ext = image.path.split('.').last.toLowerCase();
+      if (ext == 'png' || ext == 'jpg') {
+        var uploadTask = await firebase_storage.FirebaseStorage.instance
+            .ref('habitaciones/$newHabitacionId.$ext')
+            .putFile(image);
+        debugPrint('Upload finalizado');
+        var downloadUrl = await uploadTask.ref.getDownloadURL();
+        return downloadUrl;
+      } else {
+        debugPrint(
+            'Formato de imagen no válido. Solo se permiten archivos .png o .jpg.');
+        return null; 
+      }
+    } catch (e) {
+      e.printError();
+      return null;
+    }
+  }
+
+  Future<void> updateCoverHabitacion(String newHabitacion, String imageUrl) async {
+    var reference = FirebaseFirestore.instance
+        .collection("habitaciones")
+        .doc(newHabitacion);
+   return  reference.update({
+      'imagenes': imageUrl,
+    });
   }
 }

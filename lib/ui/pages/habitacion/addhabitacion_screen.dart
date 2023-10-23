@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
 
 class AddHabitacionScreen extends StatelessWidget {
@@ -30,6 +34,7 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
   final capacidadTextController = TextEditingController();
   bool isDisponible = false;
   final comodidadesTextController = TextEditingController();
+  String? image;
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +141,29 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
                       ),
                     ],
                   ),
+                  GestureDetector(
+                    onTap: () async {
+                      try {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles();
+                        if (result != null) {
+                          setState(() => image = result.files.single.path);
+                        }
+                      } catch (e) {
+                        e.printError();
+                      }
+                      // _navigateTakePictureScreen
+                    },
+                    child: SizedBox(
+                      width: 150,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: image != null
+                            ? Image.file(File(image!))
+                            : Image.asset('assets/images/take_photo.jpg'),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
@@ -158,7 +186,7 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
     );
   }
 
-  void saveHabitacion() {
+  void saveHabitacion() async {
     var nrohabitacion = nrohabitextController.text;
     var tipohab = tipohabTextController.text;
     var precioNoche = double.tryParse(preciNocheTextController.text) ?? 0.0;
@@ -166,7 +194,7 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
     var capacidad = int.tryParse(capacidadTextController.text) ?? 0;
     var comodidades = comodidadesTextController.text;
 
-    HabitacionesService().saveHabitacion(
+    String newHabitacionId = await HabitacionesService().saveHabitacion(
       nrohabitacion,
       tipohab,
       precioNoche,
@@ -175,5 +203,14 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
       isDisponible, // Use isDisponible as boolean
       comodidades,
     );
+
+    if (image != null) {
+      String? imageUrl = await HabitacionesService()
+          .uploapHabitacionCover(image!, newHabitacionId);
+      if (imageUrl != null) {
+        await HabitacionesService()
+            .updateCoverHabitacion(newHabitacionId, imageUrl);
+      }
+    }
   }
 }
