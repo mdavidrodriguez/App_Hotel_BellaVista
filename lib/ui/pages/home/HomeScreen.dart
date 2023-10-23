@@ -6,8 +6,6 @@ import 'package:hotel_bella_vista/ui/pages/habitacion/detalle_habitacion_screen.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -55,10 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Row(
                   children: [
-                    Image.asset(
-                      habitacion.imagenes,
+                    SizedBox(
                       height: 150,
                       width: 150,
+                      child: getImageWidget(habitacion.imagenes),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -109,6 +107,14 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialPageRoute(
             builder: (context) =>
                 HabitacionDetailsScreen(habitacion: habitacion)));
+  }
+
+  Widget getImageWidget(String imagenes) {
+    if (imagenes.startsWith("http")) {
+      return Image.network(imagenes, height: 150, width: 150);
+    } else {
+      return Image.asset(imagenes, height: 150, width: 150);
+    }
   }
 }
 
