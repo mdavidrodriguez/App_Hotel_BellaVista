@@ -5,9 +5,9 @@ import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart'
 import 'package:hotel_bella_vista/ui/pages/home/HomeScreen.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({
-    super.key,
-  });
+  const HomeView({super.key, required this.title});
+  final String title;
+
 
   @override
   State<HomeView> createState() => _HomeViewState();

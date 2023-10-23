@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
 import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
+import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/social.login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
+import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -14,12 +16,28 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  bool _isSingning = false;
   final FirebaseAuthService _auth = FirebaseAuthService();
 
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
+
+  var usuarior;
+
+  void ingoogle() {
+    FirebaseAuthService().ingresarGoogle().then((user) {
+      setState(() {
+        print(user);
+        usuarior = user.user!.displayName;
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const HomeView(title: 'Logueado')));
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -85,16 +103,15 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  child: FloatingActionButton(
-                    onPressed: sigIn,
-                    child: const Text('SignIn'),
-                  ),
-                ),
+                ButtonGlobal(onTap: sigIn),
                 const SizedBox(
                   height: 25,
                 ),
-                const SocialLogin(),
+                SocialLogin(
+                  onTap: () {
+                    ingoogle();
+                  },
+                ),
                 const SizedBox(height: 30),
                 const BotonNavigation(),
               ],
