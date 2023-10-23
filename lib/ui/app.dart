@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
       // home: SplashView(),
       routes: {
         '/plashView': (context) => const SplashView(),
-        '/home': (context) => const HomeView(),
-        '/login': (context) => LoginView(),
+        '/home': (context) => const HomeView(title: 'Bella vista'),
+        '/login': (context) => const LoginView(),
         '/register': (context) => Register(),
         '/panel': (context) => const PanelView(),
         '/room/register': (context) => const AddHabitacionScreen(),

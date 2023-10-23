@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
 import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
+import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
+import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.globalRegister.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
 
 class Register extends StatefulWidget {
@@ -123,13 +125,9 @@ class _RegisterState extends State<Register> {
                 const SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  child: FloatingActionButton(
-                    onPressed: _signUp,
-                    child: const Text('Registrarse'),
-                  ),
-                ),
+                ButtonRegister(onTap: _signUp),
                 const SizedBox(height: 30),
+                const BotonNavigation(),
               ],
             ),
           ),
@@ -163,5 +161,36 @@ class _RegisterState extends State<Register> {
     } else {
       print('Some error');
     }
+  }
+}
+
+class BotonNavigation extends StatelessWidget {
+  const BotonNavigation({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Ya tienes Cuenta?'),
+          InkWell(
+            child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  ' Sign In ',
+                  style: TextStyle(color: GlobalColors.textColor),
+                )),
+          )
+        ],
+      ),
+    );
   }
 }

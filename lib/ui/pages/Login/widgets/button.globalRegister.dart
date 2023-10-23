@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
 
 class ButtonRegister extends StatelessWidget {
-  const ButtonRegister({super.key});
+  final VoidCallback onTap;
+  const ButtonRegister({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        // ignore: avoid_print
-      
-        print('Registro');
-      },
+      onTap: onTap,
       child: Container(
         alignment: Alignment.center,
         height: 55,
