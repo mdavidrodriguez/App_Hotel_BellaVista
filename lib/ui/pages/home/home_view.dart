@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/listaReservas.dart';
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/room_card.dart';
 import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart';
 import 'package:hotel_bella_vista/ui/pages/home/HomeScreen.dart';
@@ -7,7 +8,6 @@ import 'package:hotel_bella_vista/ui/pages/home/HomeScreen.dart';
 class HomeView extends StatefulWidget {
   const HomeView({super.key, required this.title});
   final String title;
-
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -18,7 +18,7 @@ class _HomeViewState extends State<HomeView> {
   // ignore: prefer_final_fields
   static List<Widget> _sectionWidgets = [
     const HomeScreen(),
-    ReservationGrid(),
+    const HabitacionkshelfScreen(),
     const CardsView()
   ];
 

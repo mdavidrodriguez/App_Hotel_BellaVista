@@ -34,10 +34,10 @@ class HabitacionHotel {
                 : 0,
         estaDisponible = json["estaDisponible"] as bool,
         imagenes = json["imagenes"] ?? "assets/image.png",
-        comodidades = json["comodidades"] ??
-            "No hay"; 
+        comodidades = json["comodidades"] ?? "No hay";
 
   toJson() {
     throw UnimplementedError();
   }
+
 }

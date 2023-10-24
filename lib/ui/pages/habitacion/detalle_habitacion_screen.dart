@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotel_bella_vista/data/state/state.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
 
 class HabitacionDetailsScreen extends StatelessWidget {
@@ -26,11 +28,45 @@ class HabitacionDetailsScreen extends StatelessWidget {
                     "Numero de habitación: ${habitacion.numeroHabitacion}",
                 comodidades: "Comodidades: ${habitacion.comodidades}",
                 descripcion: "Descripción: ${habitacion.descripcion}"),
-            ElevatedButton(onPressed: () {}, child: const Text("Agregar"))
+            HabActionWidget(habitacionId: habitacion.id)
           ],
         ),
       ),
     );
+  }
+}
+
+class HabActionWidget extends StatelessWidget {
+  final String habitacionId;
+
+  const HabActionWidget({super.key, required this.habitacionId});
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HabshelfBloc, HabitacionShelState>(
+        builder: (context, HabitacionShelState) {
+      if (HabitacionShelState.habIds.contains(habitacionId)) {
+        return ElevatedButton(
+            onPressed: () {
+              _removeFromHabshelf(context, habitacionId);
+            },
+            child: const Text('Quitar'));
+      }
+      return ElevatedButton(
+          onPressed: () {
+            _addToHashelf(context, habitacionId);
+          },
+          child: const Text('Agregar'));
+    });
+  }
+
+  void _addToHashelf(BuildContext context, String habitacionId) {
+    var habitacionshelBloc = context.read<HabshelfBloc>();
+    habitacionshelBloc.add(AddHabiToHabshelf(habitacionId));
+  }
+
+  void _removeFromHabshelf(BuildContext context, String habitacionId) {
+    var habitacionshelBloc = context.read<HabshelfBloc>();
+    habitacionshelBloc.add(RemoveHabFromHabshelf(habitacionId));
   }
 }
 
@@ -49,7 +85,7 @@ class HabitacionCoverWidget extends StatelessWidget {
             spreadRadius: 5,
             blurRadius: 10)
       ]),
-      child: Image.asset(coverUrl),
+      child: Image.network(coverUrl),
     );
   }
 }
