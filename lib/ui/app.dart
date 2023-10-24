@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
+import 'package:hotel_bella_vista/data/state/state.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/splash.view.dart';
@@ -17,24 +19,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'App Hotel',
-      theme: AppTheme(selectedColor: 1).getTheme(),
-      initialRoute: '/plashView',
-      // home: SplashView(),
-      routes: {
-        '/plashView': (context) => const SplashView(),
-        '/home': (context) => const HomeView(title: 'Bella vista'),
-        '/login': (context) => const LoginView(),
-        '/register': (context) => Register(),
-        '/panel': (context) => const PanelView(),
-        '/room/register': (context) => const AddHabitacionScreen(),
-        '/reservation/register': (context) => const ReservasRegister(),
-        '/contacto': (context) => const ContactScreen(),
-        '/reservationAdmin': (context) => const ReservationScreen(),
-        '/reservashelf': (context) => ReservaShelf(),
-      },
+    return BlocProvider(
+      create: (_) => HabshelfBloc(HabitacionShelState([])),
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'App Hotel',
+        theme: AppTheme(selectedColor: 1).getTheme(),
+        initialRoute: '/plashView',
+        // home:
+        routes: {
+          '/plashView': (context) => const SplashView(),
+          '/home': (context) => const HomeView(title: 'Bella vista'),
+          '/login': (context) => const LoginView(),
+          '/register': (context) => Register(),
+          '/panel': (context) => const PanelView(),
+          '/room/register': (context) => const AddHabitacionScreen(),
+          '/reservation/register': (context) => const ReservasRegister(),
+          '/contacto': (context) => const ContactScreen(),
+          '/reservationAdmin': (context) => const ReservationScreen(),
+          '/reservashelf': (context) => const HabitacionkshelfScreen(),
+        },
+      ),
     );
   }
 }

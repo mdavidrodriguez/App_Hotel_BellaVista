@@ -14,6 +14,7 @@ class HabitacionesService {
               HabitacionHotel.fromJson(snapshop.id, snapshop.data()!),
           toFirestore: (habit, _) => habit.toJson());
 
+  
   Future<List<HabitacionHotel>> getLastHabitaciones() async {
     var resultado = await habiRef.limit(4).get().then((value) => value);
     List<HabitacionHotel> habitaciones = [];
@@ -30,6 +31,7 @@ class HabitacionesService {
     }
     throw const HttpException('habitacion not found');
   }
+  
 
   Future<String> saveHabitacion(
       String nrohabitacion,

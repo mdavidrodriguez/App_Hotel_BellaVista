@@ -28,7 +28,7 @@ class AddHabitacionForm extends StatefulWidget {
 
 class _AddHabitacionFormState extends State<AddHabitacionForm> {
   final nrohabitextController = TextEditingController();
-  final tipohabTextController = TextEditingController();
+  String? selectedTipoHabitacion;
   final preciNocheTextController = TextEditingController();
   final descripcionTextController = TextEditingController();
   final capacidadTextController = TextEditingController();
@@ -36,147 +36,207 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
   final comodidadesTextController = TextEditingController();
   String? image;
 
+  // Lista de opciones para el tipo de habitación
+  List<String> tipoHabitacionOptions = [
+    'Basica',
+    'Premium',
+    'VIP',
+  ];
+  final _formkey = GlobalKey<FormState>();
+  bool _saving_habitacion = false;
+
   @override
   Widget build(BuildContext context) {
+    if (_saving_habitacion) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return Scaffold(
-      body: Stack(children: [
-        Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/fondo.jpeg'),
-              fit: BoxFit.cover,
+      body: Form(
+        key: _formkey,
+        child: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/fondo.jpeg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
-        ),
-        SingleChildScrollView(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: nrohabitextController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'Numero de Habitación',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: tipohabTextController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      labelText: 'Tipo Habitacion',
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: preciNocheTextController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      labelText: 'Precio Por Noche',
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: descripcionTextController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      labelText: 'Descripción ',
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: capacidadTextController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      labelText: 'Capacidad ',
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    keyboardType: TextInputType.number, // Accepts int
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: comodidadesTextController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      labelText: 'Comodidades ',
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                  ),
-                  Row(
+            SingleChildScrollView(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
                     children: [
-                      const Text('Disponible:'),
-                      Switch(
-                        value: isDisponible,
-                        onChanged: (value) {
+                      TextFormField(
+                        controller: nrohabitextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'Numero de Habitación',
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingresa el numero de la habitación";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      DropdownButtonFormField<String>(
+                        value: selectedTipoHabitacion,
+                        onChanged: (newValue) {
                           setState(() {
-                            isDisponible = value;
+                            selectedTipoHabitacion = newValue;
                           });
                         },
+                        items: tipoHabitacionOptions.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Tipo de Habitación',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: preciNocheTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Precio Por Noche',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese el precio por noche";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: descripcionTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Descripción ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese la descripción";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: capacidadTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Capacidad ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese la capacidad de la habitación";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: comodidadesTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Comodidades ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese las comodidades";
+                          }
+                          return null;
+                        },
+                      ),
+                      Row(
+                        children: [
+                          const Text('Disponible:'),
+                          Switch(
+                            value: isDisponible,
+                            onChanged: (value) {
+                              setState(() {
+                                isDisponible = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          try {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles();
+                            if (result != null) {
+                              setState(() => image = result.files.single.path);
+                            }
+                          } catch (e) {
+                            e.printError();
+                          }
+                        },
+                        child: SizedBox(
+                          width: 150,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: image != null
+                                ? Image.file(File(image!))
+                                : Image.asset('assets/images/take_photo.jpg'),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formkey.currentState!.validate()) {
+                            saveHabitacion(context);
+                          }
+                        },
+                        child: const Text('Guardar'),
                       ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () async {
-                      try {
-                        FilePickerResult? result =
-                            await FilePicker.platform.pickFiles();
-                        if (result != null) {
-                          setState(() => image = result.files.single.path);
-                        }
-                      } catch (e) {
-                        e.printError();
-                      }
-                      // _navigateTakePictureScreen
-                    },
-                    child: SizedBox(
-                      width: 150,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: image != null
-                            ? Image.file(File(image!))
-                            : Image.asset('assets/images/take_photo.jpg'),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      saveHabitacion();
-                    },
-                    child: const Text('Guardar'),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ]),
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.arrow_back_ios_new_rounded),
         onPressed: () {
@@ -186,9 +246,9 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
     );
   }
 
-  void saveHabitacion() async {
+  void saveHabitacion(BuildContext context) async {
     var nrohabitacion = nrohabitextController.text;
-    var tipohab = tipohabTextController.text;
+    var tipohab = selectedTipoHabitacion;
     var precioNoche = double.tryParse(preciNocheTextController.text) ?? 0.0;
     var descripcion = descripcionTextController.text;
     var capacidad = int.tryParse(capacidadTextController.text) ?? 0;
@@ -196,7 +256,7 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
 
     String newHabitacionId = await HabitacionesService().saveHabitacion(
       nrohabitacion,
-      tipohab,
+      tipohab.toString(),
       precioNoche,
       descripcion,
       capacidad,
@@ -204,6 +264,9 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
       comodidades,
     );
 
+    setState(() {
+      _saving_habitacion = true;
+    });
     if (image != null) {
       String? imageUrl = await HabitacionesService()
           .uploapHabitacionCover(image!, newHabitacionId);
@@ -211,6 +274,7 @@ class _AddHabitacionFormState extends State<AddHabitacionForm> {
         await HabitacionesService()
             .updateCoverHabitacion(newHabitacionId, imageUrl);
       }
+      Navigator.pop(context);
     }
   }
 }
