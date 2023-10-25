@@ -85,8 +85,16 @@ class HabitacionCoverWidget extends StatelessWidget {
             spreadRadius: 5,
             blurRadius: 10)
       ]),
-      child: Image.network(coverUrl),
+      child: getImageWidget(coverUrl),
     );
+  }
+
+  getImageWidget(String imagenes) {
+    if (imagenes.startsWith("http")) {
+      return Image.network(imagenes, height: 150, width: 150);
+    } else {
+      return Image.asset(imagenes, height: 150, width: 150);
+    }
   }
 }
 

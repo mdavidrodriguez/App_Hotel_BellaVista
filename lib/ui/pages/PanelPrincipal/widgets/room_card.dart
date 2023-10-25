@@ -76,7 +76,7 @@ class RoomCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/room/register');
+        Navigator.pushNamed(context, '/editarhabitacion');
       },
       onHover: (value) => const Text("Habitaciones"),
       child: Center(

@@ -19,7 +19,7 @@ class ButtonGlobal extends StatelessWidget {
               BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)
             ]),
         child: const Text(
-          'Sign Up',
+          'Iniciar Sesión',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
       ),

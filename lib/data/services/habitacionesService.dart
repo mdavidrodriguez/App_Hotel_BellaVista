@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
 
 class HabitacionesService {
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
   final habiRef = FirebaseFirestore.instance
       .collection('habitaciones')
       .withConverter(
@@ -14,7 +15,6 @@ class HabitacionesService {
               HabitacionHotel.fromJson(snapshop.id, snapshop.data()!),
           toFirestore: (habit, _) => habit.toJson());
 
-  
   Future<List<HabitacionHotel>> getLastHabitaciones() async {
     var resultado = await habiRef.limit(4).get().then((value) => value);
     List<HabitacionHotel> habitaciones = [];
@@ -31,7 +31,6 @@ class HabitacionesService {
     }
     throw const HttpException('habitacion not found');
   }
-  
 
   Future<String> saveHabitacion(
       String nrohabitacion,
@@ -69,7 +68,7 @@ class HabitacionesService {
       } else {
         debugPrint(
             'Formato de imagen no válido. Solo se permiten archivos .png o .jpg.');
-        return null; 
+        return null;
       }
     } catch (e) {
       e.printError();
@@ -77,12 +76,37 @@ class HabitacionesService {
     }
   }
 
-  Future<void> updateCoverHabitacion(String newHabitacion, String imageUrl) async {
+  Future<void> updateCoverHabitacion(
+      String newHabitacion, String imageUrl) async {
     var reference = FirebaseFirestore.instance
         .collection("habitaciones")
         .doc(newHabitacion);
-   return  reference.update({
+    return reference.update({
       'imagenes': imageUrl,
     });
   }
+
+  static Future<List<HabitacionHotel>> listarHabitaciones() async {
+    QuerySnapshot querySnapshot = await _db.collection("habitaciones").get();
+    List<HabitacionHotel> lista = [];
+    for (var doc in querySnapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      lista.add(HabitacionHotel.desdeDoc(doc.id, data));
+    }
+    return lista;
+  }
+  static Future<void> actualizarHabitacion(String id, Map<String, dynamic> datos) async {
+    await _db
+        .collection('habitaciones')
+        .doc(id)
+        .update(datos)
+        .catchError((e) {
+          print('Error al actualizar habitación: $e');
+        });
+  }
+    static Future<void> eliminarHabitacion(String id) async {
+    await _db.collection('habitaciones').doc(id).delete().catchError((e) {});
+  }
+
+ 
 }

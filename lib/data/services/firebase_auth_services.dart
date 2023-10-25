@@ -4,10 +4,22 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
   FirebaseAuth auth = FirebaseAuth.instance;
+
   Future<dynamic> crearRegistroEmail(dynamic email, dynamic pass) async {
     try {
       UserCredential usuario = await auth.createUserWithEmailAndPassword(
           email: email, password: pass);
+
+      // Almacena los datos del usuario en Firestore
+      await storeUserDataInFirestore(
+        userId: usuario.user!.uid,
+        identificacion: '', // Puedes establecer estos valores como desees
+        nombre: '',
+        apellido: '',
+        telefono: '',
+        email: email,
+      );
+
       return usuario;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -52,6 +64,16 @@ class FirebaseAuthService {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+ Future<User?> singInWithAndPassword(String email, String password) async {
+    try {
+      UserCredential credential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return credential.user;
+    } catch (e) {
+      print("some error");
+    }
+    return null;
+  }
   Future<User?> signupWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -64,21 +86,10 @@ class FirebaseAuthService {
     return null;
   }
 
-  Future<User?> singInWithAndPassword(String email, String password) async {
-    try {
-      UserCredential credential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return credential.user;
-    } catch (e) {
-      print("some error");
-    }
-    return null;
-  }
-
   Future<void> storeUserDataInFirestore({
     required String userId,
     required String identificacion,
-    required String username,
+    required String nombre,
     required String apellido,
     required String telefono,
     required String email,
@@ -89,7 +100,7 @@ class FirebaseAuthService {
     try {
       await userCollection.doc(userId).set({
         'identificacion': identificacion,
-        'username': username,
+        'nombre': nombre,
         'apellido': apellido,
         'telefono': telefono,
         'email': email,
