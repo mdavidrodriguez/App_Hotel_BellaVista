@@ -12,7 +12,10 @@ import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/registerForm_R
 import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/servicioCliente.dart';
 import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/addhabitacion_screen.dart';
+import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
+import 'package:hotel_bella_vista/ui/pages/servicios/addservicio.dart';
+import 'package:hotel_bella_vista/ui/pages/servicios/listarservicios.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -31,13 +34,16 @@ class MyApp extends StatelessWidget {
           '/plashView': (context) => const SplashView(),
           '/home': (context) => const HomeView(title: 'Bella vista'),
           '/login': (context) => const LoginView(),
-          '/register': (context) => Register(),
+          '/register': (context) => const Register(),
           '/panel': (context) => const PanelView(),
-          '/room/register': (context) => const AddHabitacionScreen(),
           '/reservation/register': (context) => const ReservasRegister(),
           '/contacto': (context) => const ContactScreen(),
           '/reservationAdmin': (context) => const ReservationScreen(),
           '/reservashelf': (context) => const HabitacionkshelfScreen(),
+          '/editarhabitacion': (context) => const EditHabitacionScreen(),
+          '/listarHabitaciones': (context) => const ListarHabitaciones(),
+          '/editarservicio': (context) => const EditServicioScreen(),
+          '/listarservicios': (context) => const ListarServicios(),
         },
       ),
     );

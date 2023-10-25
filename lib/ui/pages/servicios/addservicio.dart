@@ -3,79 +3,70 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
-import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
-import 'package:hotel_bella_vista/domain/models/habitacion.dart';
+import 'package:hotel_bella_vista/data/services/servicios_services.dart';
+import 'package:hotel_bella_vista/domain/controller/servicios_controller.dart';
+import 'package:hotel_bella_vista/domain/models/servicios.dart';
 
-class EditHabitacionScreen extends StatelessWidget {
-  const EditHabitacionScreen({super.key});
+class EditServicioScreen extends StatelessWidget {
+  const EditServicioScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final HabitacionHotel? habitacion = Get.arguments as HabitacionHotel?;
+    final ServicioHotel? servicio = Get.arguments as ServicioHotel?;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            habitacion != null ? 'Editar Habitación' : 'Agregar Habitación'),
+        title: Text(servicio != null ? 'Editar Servicio' : 'Agregar Servicio'),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: EditHabitacionForm(habitacion: habitacion),
+      body: EditServicioForm(servicio: servicio),
     );
   }
 }
 
-class EditHabitacionForm extends StatefulWidget {
-  final HabitacionHotel? habitacion;
+class EditServicioForm extends StatefulWidget {
+  final ServicioHotel? servicio;
 
-  const EditHabitacionForm({required this.habitacion, super.key});
+  const EditServicioForm({super.key, this.servicio});
 
   @override
-  State<EditHabitacionForm> createState() => _EditHabitacionFormState();
+  State<EditServicioForm> createState() => _EditServicioFormState();
 }
 
-class _EditHabitacionFormState extends State<EditHabitacionForm> {
-  final nrohabitextController = TextEditingController();
-  String? selectedTipoHabitacion;
-  final preciNocheTextController = TextEditingController();
+class _EditServicioFormState extends State<EditServicioForm> {
+  final nombreTextController = TextEditingController();
   final descripcionTextController = TextEditingController();
+  final costoTextController = TextEditingController();
+  final tipoTextController = TextEditingController();
   final capacidadTextController = TextEditingController();
   bool isDisponible = false;
-  final comodidadesTextController = TextEditingController();
   String? image;
 
-  List<String> tipoHabitacionOptions = [
-    'Basica',
-    'Premium',
-    'VIP',
-  ];
-  final _formkey = GlobalKey<FormState>();
-  bool _saving_habitacion = false;
+  final _formKey = GlobalKey<FormState>();
+  bool savingServicio = false;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.habitacion != null) {
-      nrohabitextController.text = widget.habitacion!.numeroHabitacion;
-      selectedTipoHabitacion = widget.habitacion!.tipoHabitacion;
-      preciNocheTextController.text =
-          widget.habitacion!.precioPorNoche.toString();
-      descripcionTextController.text = widget.habitacion!.descripcion;
-      capacidadTextController.text = widget.habitacion!.capacidad.toString();
-      isDisponible = widget.habitacion!.estaDisponible;
-      comodidadesTextController.text = widget.habitacion!.comodidades;
+    if (widget.servicio != null) {
+      nombreTextController.text = widget.servicio!.nombre;
+      descripcionTextController.text = widget.servicio!.descripcion;
+      costoTextController.text = widget.servicio!.costo.toStringAsFixed(2);
+      tipoTextController.text = widget.servicio!.tipo;
+      capacidadTextController.text = widget.servicio!.capacidad.toString();
+      isDisponible = widget.servicio!.estaDisponible;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_saving_habitacion) {
+    if (savingServicio) {
       return const Center(child: CircularProgressIndicator());
     }
     return Scaffold(
       body: Form(
-        key: _formkey,
+        key: _formKey,
         child: Stack(
           children: [
             Container(
@@ -93,62 +84,18 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: nrohabitextController,
+                        controller: nombreTextController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                           filled: true,
                           fillColor: Colors.white,
-                          labelText: 'Numero de Habitación',
+                          labelText: 'Nombre del Servicio',
                         ),
-                        keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Por favor ingresa el numero de la habitación";
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      DropdownButtonFormField<String>(
-                        value: selectedTipoHabitacion,
-                        onChanged: (newValue) {
-                          setState(() {
-                            selectedTipoHabitacion = newValue;
-                          });
-                        },
-                        items: tipoHabitacionOptions.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText: 'Tipo de Habitación',
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: preciNocheTextController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText: 'Precio Por Noche',
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Por favor ingrese el precio por noche";
+                            return "Por favor ingresa el nombre del servicio";
                           }
                           return null;
                         },
@@ -173,41 +120,43 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
-                        controller: capacidadTextController,
+                        controller: costoTextController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          labelText: 'Capacidad ',
+                          labelText: 'Costo',
                           filled: true,
                           fillColor: Colors.white,
                         ),
-                        keyboardType: TextInputType.number,
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Por favor ingrese la capacidad de la habitación";
+                            return "Por favor ingrese el costo del servicio";
                           }
                           return null;
                         },
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
-                        controller: comodidadesTextController,
+                        controller: tipoTextController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          labelText: 'Comodidades ',
+                          labelText: 'Tipo del Servicio',
                           filled: true,
                           fillColor: Colors.white,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Por favor ingrese las comodidades";
+                            return "Por favor ingrese el tipo del servicio";
                           }
                           return null;
                         },
                       ),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
                           const Text('Disponible:'),
@@ -220,6 +169,27 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                             },
                           ),
                         ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: capacidadTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Capacidad ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese la Cantidad disponible del servicio";
+                          }
+                          return null;
+                        },
                       ),
                       GestureDetector(
                         onTap: () async {
@@ -246,8 +216,8 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
-                          if (_formkey.currentState!.validate()) {
-                            saveHabitacion(context);
+                          if (_formKey.currentState!.validate()) {
+                            saveServicio(context);
                           }
                         },
                         child: const Text('Guardar'),
@@ -269,55 +239,46 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
     );
   }
 
-  void saveHabitacion(BuildContext context) async {
-    var nrohabitacion = nrohabitextController.text;
-    var tipohab = selectedTipoHabitacion;
-    var precioNoche = double.tryParse(preciNocheTextController.text) ?? 0.0;
+  void saveServicio(BuildContext context) async {
+    var nombre = nombreTextController.text;
     var descripcion = descripcionTextController.text;
+    var costo = double.tryParse(costoTextController.text) ?? 0.0;
+    var tipo = tipoTextController.text;
     var capacidad = int.tryParse(capacidadTextController.text) ?? 0;
-    var comodidades = comodidadesTextController.text;
 
-    if (widget.habitacion == null) {
-      String newHabitacionId = await HabitacionesService().saveHabitacion(
-        nrohabitacion,
-        tipohab.toString(),
-        precioNoche,
-        descripcion,
-        capacidad,
-        isDisponible,
-        comodidades,
-      );
+    if (widget.servicio == null) {
+      String newServicioId = await ServiciosServices().saveServicio(
+          nombre, descripcion, costo, tipo, isDisponible, capacidad);
       if (image != null) {
-        String? imageUrl = await HabitacionesService()
-            .uploapHabitacionCover(image!, newHabitacionId);
+        String? imageUrl = await ServiciosServices()
+            .uploadServicioCover(image!, newServicioId);
         if (imageUrl != null) {
-          await HabitacionesService()
-              .updateCoverHabitacion(newHabitacionId, imageUrl);
-          ConsultasHabitacionController uc = Get.find();
-          await uc.consultarHabitaciones();
+          await ServiciosServices()
+              .updateCoverServicio(newServicioId, imageUrl);
+          ConsultasServiciosController sc = Get.find();
+          await sc.consultarServicio();
         }
       }
     } else {
-      await HabitacionesService.actualizarHabitacion(widget.habitacion!.id, {
-        "numeroHabitacion": nrohabitacion,
-        "tipoHabitacion": tipohab.toString(),
-        "precioPorNoche": precioNoche,
+      await ServiciosServices.actualizarServicio(widget.servicio!.id, {
+        "nombre": nombre,
         "descripcion": descripcion,
-        "capacidad": capacidad,
+        "costo": costo,
+        "tipo": tipo,
         "estaDisponible": isDisponible,
-        "comodidades": comodidades,
+        "capacidad": capacidad
       });
       if (image != null) {
-        String? imageUrl = await HabitacionesService()
-            .uploapHabitacionCover(image!, widget.habitacion!.id);
+        String? imageUrl = await ServiciosServices()
+            .uploadServicioCover(image!, widget.servicio!.id);
         if (imageUrl != null) {
-          await HabitacionesService()
-              .updateCoverHabitacion(widget.habitacion!.id, imageUrl);
-          ConsultasHabitacionController uc = Get.find();
-          await uc.consultarHabitaciones();
+          await ServiciosServices()
+              .updateCoverServicio(widget.servicio!.id, imageUrl);
+          ConsultasServiciosController sc = Get.find();
+          await sc.consultarServicio();
         }
       }
     }
-    Get.offAndToNamed('/listarHabitaciones');
+    Get.offAndToNamed('/listarServicios');
   }
 }

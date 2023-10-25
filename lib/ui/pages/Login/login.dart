@@ -23,6 +23,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController passwordController = TextEditingController();
 
   var usuarior;
+  final _formkey = GlobalKey<FormState>();
 
   void ingoogle() {
     FirebaseAuthService().ingresarGoogle().then((user) {
@@ -51,70 +52,90 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.040,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(115),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 230,
+          child: Form(
+            key: _formkey,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.040,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(115),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: 230,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  'Login to your Account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: GlobalColors.textColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                // Campo email
-                TextFormGlobal(
-                  controller: emailController,
-                  text: 'Email',
-                  obscure: false,
-                  textInputType: TextInputType.emailAddress,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // Password input
-                TextFormGlobal(
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    'LOGIN',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: GlobalColors.textColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  // Campo email
+                  TextFormGlobal(
+                    controller: emailController,
+                    text: 'Email',
+                    obscure: false,
+                    textInputType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese el email";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // Password input
+                  TextFormGlobal(
                     controller: passwordController,
                     text: 'Password',
                     textInputType: TextInputType.text,
-                    obscure: true),
-                const SizedBox(
-                  height: 10,
-                ),
-                ButtonGlobal(onTap: sigIn),
-                const SizedBox(
-                  height: 25,
-                ),
-                SocialLogin(
-                  onTap: () {
-                    ingoogle();
-                  },
-                ),
-                const SizedBox(height: 30),
-                const BotonNavigation(),
-              ],
+                    obscure: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese la contraseña";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ButtonGlobal(onTap: () {
+                    if (_formkey.currentState!.validate()) {
+                      sigIn();
+                    }
+                  }),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  SocialLogin(
+                    onTap: () {
+                      ingoogle();
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  const BotonNavigation(),
+                ],
+              ),
             ),
           ),
         ),
@@ -160,7 +181,7 @@ class BotonNavigation extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => Register()));
               },
               child: Text(
-                ' Sign Up ',
+                ' Registrate',
                 style: TextStyle(color: GlobalColors.maincolor),
               ),
             ),

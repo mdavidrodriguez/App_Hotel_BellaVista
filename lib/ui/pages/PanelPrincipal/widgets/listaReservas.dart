@@ -6,42 +6,42 @@ import 'package:hotel_bella_vista/domain/models/habitacion.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/addhabitacion_screen.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/detalle_habitacion_screen.dart';
 
-
 class HabitacionkshelfScreen extends StatelessWidget {
   const HabitacionkshelfScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HabshelfBloc, HabitacionShelState>(
+    return Scaffold(
+      body: BlocBuilder<HabshelfBloc, HabitacionShelState>(
         builder: (context, habitacionshelfState) {
-      var widget = habitacionshelfState.habIds.isEmpty
-          ? Scaffold(
-              body: Center(
-                child: Text(
-                  'Aun no tienes ninguna reserva realizada',
-                  style: Theme.of(context).textTheme.headline4,
-                  textAlign: TextAlign.center,
-                ),
+          var widget = habitacionshelfState.habIds.isEmpty
+              ? Center(
+                  child: Text(
+                    'Aun no tienes ninguna reserva realizada',
+                    style: Theme.of(context).textTheme.headline4,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : Myhabitacion(habitacionshelfState.habIds);
+          return Column(
+            children: [
+              Expanded(child: widget),
+              ElevatedButton(
+                onPressed: () {
+                  _navigateToAddBookScreen(context);
+                },
+                child: const Text('Agregar una habitacion'),
               ),
-            )
-          : Myhabitacion(habitacionshelfState.habIds);
-      return Column(
-        children: [
-          Expanded(child: widget),
-          ElevatedButton(
-            onPressed: () {
-              _navigateToAddBookScreen(context);
-            },
-            child: const Text('Agregar una habitacion'),
-          ),
-        ],
-      );
-    });
+            ],
+          );
+        },
+      ),
+    );
   }
 
   void _navigateToAddBookScreen(BuildContext context) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AddHabitacionScreen()));
+        MaterialPageRoute(builder: (context) => const EditHabitacionScreen()));
   }
 }
 

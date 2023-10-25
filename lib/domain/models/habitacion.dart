@@ -33,11 +33,28 @@ class HabitacionHotel {
                 ? int.tryParse(json["capacidad"] as String) ?? 0
                 : 0,
         estaDisponible = json["estaDisponible"] as bool,
-        imagenes = json["imagenes"] ?? "assets/image.png",
+        imagenes = json["imagenes"] ?? "assets/images/sin_imagen.jpg",
         comodidades = json["comodidades"] ?? "No hay";
 
   toJson() {
     throw UnimplementedError();
   }
 
+  factory HabitacionHotel.desdeDoc(String id, Map<String, dynamic> json) {
+    return HabitacionHotel(
+      id: id,
+      numeroHabitacion: json["numeroHabitacion"] ?? '',
+      tipoHabitacion: json["tipoHabitacion"] ?? '',
+      precioPorNoche: (json["precioPorNoche"] as num?)?.toDouble() ?? 0.0,
+      descripcion: json["descripcion"] ?? '',
+      capacidad: json["capacidad"] is int
+          ? json["capacidad"]
+          : json["capacidad"] is String
+              ? int.tryParse(json["capacidad"] as String) ?? 0
+              : 0,
+      estaDisponible: json["estaDisponible"] as bool? ?? false,
+      imagenes: json["imagenes"] ?? 'assets/images/sin_imagen.jpg',
+      comodidades: json["comodidades"] ?? 'No hay',
+    );
+  }
 }

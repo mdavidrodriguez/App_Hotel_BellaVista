@@ -1,14 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
 import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
-import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.globalRegister.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
 
 class Register extends StatefulWidget {
-  Register({super.key});
+  const Register({super.key});
 
   @override
   State<Register> createState() => _RegisterState();
@@ -26,6 +24,8 @@ class _RegisterState extends State<Register> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  final _formkey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     nombreController.dispose();
@@ -41,94 +41,143 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.040,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(115),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 230,
+          child: Form(
+            key: _formkey,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.040,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(115),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        height: 230,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  'Create your Account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: GlobalColors.textColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                // Campo email
-                TextFormGlobal(
-                  controller: identificacionController,
-                  text: 'Identificación',
-                  obscure: false,
-                  textInputType: TextInputType.number,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // Password input
-                TextFormGlobal(
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    'Crear una Cuenta',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: GlobalColors.textColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  // Campo email
+                  TextFormGlobal(
+                    controller: identificacionController,
+                    text: 'Identificación',
+                    obscure: false,
+                    textInputType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese su identificación";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // Password input
+                  TextFormGlobal(
                     controller: nombreController,
                     text: 'Nombre',
                     textInputType: TextInputType.text,
-                    obscure: false),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormGlobal(
+                    obscure: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese su nombre";
+                      }
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormGlobal(
                     controller: apellidoController,
                     text: 'Apellido',
                     textInputType: TextInputType.text,
-                    obscure: false),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormGlobal(
+                    obscure: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese su apellido";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormGlobal(
                     controller: telefonoController,
                     text: 'Telefono',
                     textInputType: TextInputType.number,
-                    obscure: false),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormGlobal(
+                    obscure: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese su telefono";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormGlobal(
                     controller: emailController,
                     text: 'Email',
                     textInputType: TextInputType.emailAddress,
-                    obscure: false),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormGlobal(
+                    obscure: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese su email";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormGlobal(
                     controller: passwordController,
                     text: 'Contraseña',
                     textInputType: TextInputType.text,
-                    obscure: true),
-                const SizedBox(
-                  height: 10,
-                ),
-                ButtonRegister(onTap: _signUp),
-                const SizedBox(height: 30),
-                const BotonNavigation(),
-              ],
+                    obscure: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese su password";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ButtonRegister(onTap: () {
+                    if (_formkey.currentState!.validate()) {
+                      _signUp();
+                    }
+                  }),
+                  const SizedBox(height: 30),
+                  const BotonNavigation(),
+                ],
+              ),
             ),
           ),
         ),
@@ -138,7 +187,7 @@ class _RegisterState extends State<Register> {
 
   void _signUp() async {
     String identificacion = identificacionController.text;
-    String username = nombreController.text;
+    String nombre = nombreController.text;
     String apellido = apellidoController.text;
     String telefono = telefonoController.text;
     String email = emailController.text;
@@ -150,7 +199,7 @@ class _RegisterState extends State<Register> {
       await _auth.storeUserDataInFirestore(
         userId: user.uid,
         identificacion: identificacion,
-        username: username,
+        nombre: nombre,
         apellido: apellido,
         telefono: telefono,
         email: email,
@@ -185,7 +234,7 @@ class BotonNavigation extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Text(
-                  ' Sign In ',
+                  ' Inicia Sesión ',
                   style: TextStyle(color: GlobalColors.textColor),
                 )),
           )
