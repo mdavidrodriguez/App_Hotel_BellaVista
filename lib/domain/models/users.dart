@@ -5,6 +5,8 @@ class UserData {
   final String apellido;
   final String telefono;
   final String email;
+  final String imagen;
+
 
   UserData({
     required this.id,
@@ -13,6 +15,7 @@ class UserData {
     required this.apellido,
     required this.telefono,
     required this.email,
+    required this.imagen
   });
 
   factory UserData.fromMap(String id, Map<String, dynamic> map) {
@@ -23,6 +26,7 @@ class UserData {
       apellido: map['apellido'] ?? '',
       telefono: map['telefono'] ?? '',
       email: map['email'] ?? '',
+      imagen: map['imagenes'] ?? '',
     );
   }
 }

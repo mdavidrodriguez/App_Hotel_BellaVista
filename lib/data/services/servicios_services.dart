@@ -35,7 +35,7 @@ class ServiciosServices {
       final ext = image.path.split('.').last.toLowerCase();
       if (ext == 'png' || ext == 'jpg') {
         var uploadTask = await FirebaseStorage.instance
-            .ref('servicios/$newServicioId.$ext')
+            .ref('users/$newServicioId.$ext')
             .putFile(image);
         debugPrint('Subida completada');
         var downloadUrl = await uploadTask.ref.getDownloadURL();

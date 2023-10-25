@@ -30,6 +30,7 @@ class _HomeViewState extends State<HomeView> {
     final colors = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: colors.primary,
         title: const Text(
           'Hotel Bella vista',
@@ -39,12 +40,15 @@ class _HomeViewState extends State<HomeView> {
         centerTitle: true,
         // automaticallyImplyLeading: false,
         actions: [
-          FloatingActionButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.pop(context);
-            },
-            child: const Icon(Icons.login_outlined),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5, right: 5),
+            child: FloatingActionButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.login_outlined),
+            ),
           )
         ],
       ),
