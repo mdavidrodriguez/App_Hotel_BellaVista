@@ -35,7 +35,11 @@ class ServiciosServices {
       final ext = image.path.split('.').last.toLowerCase();
       if (ext == 'png' || ext == 'jpg') {
         var uploadTask = await FirebaseStorage.instance
+<<<<<<< HEAD
             .ref('users/$newServicioId.$ext')
+=======
+            .ref('servicios/$newServicioId.$ext')
+>>>>>>> d5980e2 (habitaciones,servicios)
             .putFile(image);
         debugPrint('Subida completada');
         var downloadUrl = await uploadTask.ref.getDownloadURL();

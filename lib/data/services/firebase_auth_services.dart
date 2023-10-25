@@ -10,9 +10,16 @@ class FirebaseAuthService {
       UserCredential usuario = await auth.createUserWithEmailAndPassword(
           email: email, password: pass);
 
+<<<<<<< HEAD
       await storeUserDataInFirestore(
         userId: usuario.user!.uid,
         identificacion: '',
+=======
+      // Almacena los datos del usuario en Firestore
+      await storeUserDataInFirestore(
+        userId: usuario.user!.uid,
+        identificacion: '', // Puedes establecer estos valores como desees
+>>>>>>> d5980e2 (habitaciones,servicios)
         nombre: '',
         apellido: '',
         telefono: '',
@@ -84,9 +91,12 @@ class FirebaseAuthService {
     }
     return null;
   }
+<<<<<<< HEAD
    Future<User?> getCurrentUser() {
     return auth.authStateChanges().first;
   }
+=======
+>>>>>>> d5980e2 (habitaciones,servicios)
 
   Future<void> storeUserDataInFirestore({
     required String userId,

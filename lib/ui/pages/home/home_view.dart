@@ -1,14 +1,11 @@
 // ignore_for_file: prefer_final_fields
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hotel_bella_vista/domain/controller/user_services.dart';
-import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
-import 'package:hotel_bella_vista/ui/pages/panelPrincipal/room_card.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/listaReservas.dart';
+import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/room_card.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
-import 'package:hotel_bella_vista/ui/pages/home/homeScreen.dart';
+import 'package:hotel_bella_vista/ui/pages/home/HomeScreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:hotel_bella_vista/ui/pages/perfil/listarusuarios.dart';
 import 'package:hotel_bella_vista/ui/pages/perfil/mostrarperfil.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/listarServicios.dart';
 
@@ -24,7 +21,7 @@ class _HomeViewState extends State<HomeView> {
   final UserController sc = Get.find();
   int _selectedIndex = 0;
   static List<Widget> _sectionWidgets = [
-    const HomeScreen(),
+    HomeScreen(),
     const HabitacionkshelfScreen(),
     const CardsView(),
   ];
@@ -70,6 +67,10 @@ class _HomeViewState extends State<HomeView> {
         ),
         elevation: 0,
         centerTitle: true,
+<<<<<<< HEAD
+=======
+        // automaticallyImplyLeading: false,
+>>>>>>> d5980e2 (habitaciones,servicios)
         actions: [
           Padding(
             padding: const EdgeInsets.only(bottom: 5, right: 5),
@@ -84,6 +85,7 @@ class _HomeViewState extends State<HomeView> {
         ],
       ),
       drawer: Drawer(
+<<<<<<< HEAD
         child: ListView.builder(
           itemCount: drawerItems.length + 1,
           itemBuilder: (context, index) {
@@ -139,6 +141,48 @@ class _HomeViewState extends State<HomeView> {
               );
             }
           },
+=======
+        child: ListView(
+          children: [
+            DrawerHeader(
+                decoration: BoxDecoration(color: colors.primary),
+                padding: EdgeInsets.zero,
+                child: const Center(
+                  child: Text('Menu de Opciones',
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
+                )),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Habitaciones'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ListarHabitaciones()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.room_service_outlined),
+              title: const Text('Servicios'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ListarServicios()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.supervised_user_circle),
+              title: const Text('Usuarios'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Userscreen()));
+              },
+            ),
+          ],
+>>>>>>> d5980e2 (habitaciones,servicios)
         ),
       ),
       body: IndexedStack(

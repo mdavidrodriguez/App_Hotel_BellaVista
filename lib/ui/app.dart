@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
           '/listarHabitaciones': (context) => const ListarHabitaciones(),
           '/editarservicio': (context) => const EditServicioScreen(),
           '/listarservicios': (context) => const ListarServicios(),
-          '/listarUsuarios': (context) => const ListarUsuarios(),
         },
       ),
     );
