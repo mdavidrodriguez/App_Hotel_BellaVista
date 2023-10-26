@@ -206,6 +206,12 @@ class _RegisterState extends State<Register> {
       );
 
       Navigator.pushNamed(context, "/home");
+      identificacionController.clear();
+      nombreController.clear();
+      apellidoController.clear();
+      telefonoController.clear();
+      emailController.clear();
+      passwordController.clear();
       print("User is successfully created");
     } else {
       print('Some error');

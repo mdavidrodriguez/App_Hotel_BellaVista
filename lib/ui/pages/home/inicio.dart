@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_texts.dart';
 import 'package:hotel_bella_vista/config/theme/color_styles.dart';
 import 'package:hotel_bella_vista/config/theme/text_styles.dart';
-import 'package:hotel_bella_vista/widgets/corusel.dart';
+import 'package:hotel_bella_vista/ui/pages/widgets/corusel.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({
@@ -29,8 +29,8 @@ class _HomeViewState extends State<HomeView> {
     fontWeight: FontWeight.w500,
   );
 
-  int _selectedIndex = 0;
-  static const List<Widget> _sections = [Text('Inicio'), Text('Biblioteca')];
+  int selectedIndex = 0;
+  // static const List<Widget> _sections = [Text('Inicio'), Text('Biblioteca')];
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
               icon: Icon(Icons.meeting_room), label: 'Reservas'),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: _onItemTapped,
       ),
     );
