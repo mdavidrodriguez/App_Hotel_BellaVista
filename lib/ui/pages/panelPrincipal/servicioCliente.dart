@@ -25,7 +25,7 @@ class ContactScreen extends StatelessWidget {
               ContactIcon(
                 icon: Icons.phone,
                 label: 'WhatsApp',
-                url: 'https://wa.me/3104956725',
+                url: 'https://wa.me/573104956725',
               ),
               SizedBox(
                 height: 13,

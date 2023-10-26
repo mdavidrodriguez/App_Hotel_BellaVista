@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/listaReservas.dart';
-import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/room_card.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/room_card.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
-import 'package:hotel_bella_vista/ui/pages/home/HomeScreen.dart';
+import 'package:hotel_bella_vista/ui/pages/home/homeScreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hotel_bella_vista/ui/pages/perfil/mostrarperfil.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/listarServicios.dart';
@@ -20,7 +20,7 @@ class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
   // ignore: prefer_final_fields
   static List<Widget> _sectionWidgets = [
-    HomeScreen(),
+    const HomeScreen(),
     const HabitacionkshelfScreen(),
     const CardsView()
   ];
@@ -45,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
             child: FloatingActionButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, '/login');
               },
               child: const Icon(Icons.login_outlined),
             ),
@@ -62,36 +62,18 @@ class _HomeViewState extends State<HomeView> {
                   child: Text('Menu de Opciones',
                       style: TextStyle(fontSize: 20, color: Colors.white)),
                 )),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Habitaciones'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ListarHabitaciones()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.room_service_outlined),
-              title: const Text('Servicios'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ListarServicios()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.supervised_user_circle),
-              title: const Text('Usuarios'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Userscreen()));
-              },
-            ),
+            const ItemDrawer(
+                icono: Icon(Icons.home),
+                pantalla: ListarHabitaciones(),
+                titulo: Text('Habitaciones')),
+            const ItemDrawer(
+                titulo: Text('Servicios'),
+                pantalla: ListarServicios(),
+                icono: Icon(Icons.room_service_outlined)),
+            const ItemDrawer(
+                titulo: Text('Perfil'),
+                pantalla: Userscreen(),
+                icono: Icon(Icons.supervised_user_circle)),
           ],
         ),
       ),
@@ -141,5 +123,29 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+}
+
+class ItemDrawer extends StatelessWidget {
+  const ItemDrawer({
+    super.key,
+    required this.titulo,
+    required this.pantalla,
+    required this.icono,
+  });
+
+  final Text titulo;
+  final Widget pantalla;
+  final Icon icono;
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: icono,
+      title: titulo,
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => pantalla));
+      },
+    );
   }
 }

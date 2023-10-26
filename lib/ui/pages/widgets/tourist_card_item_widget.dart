@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/config/theme/color_styles.dart';
 import 'package:hotel_bella_vista/config/theme/text_styles.dart';
-import 'package:hotel_bella_vista/extractButton/textfield_button.dart';
+import 'package:hotel_bella_vista/ui/pages/widgets/textfield_button.dart';
 
 class TouristCardItemWidget extends StatefulWidget {
   final String title;

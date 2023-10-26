@@ -9,10 +9,10 @@ class Userscreen extends StatefulWidget {
   const Userscreen({super.key});
 
   @override
-  _UserscreenState createState() => _UserscreenState();
+  UserscreenState createState() => UserscreenState();
 }
 
-class _UserscreenState extends State<Userscreen> {
+class UserscreenState extends State<Userscreen> {
   final UserController sc = Get.find();
   final ImagePicker _imagePicker = ImagePicker();
   ImageProvider? _image;
@@ -77,9 +77,13 @@ class _UserscreenState extends State<Userscreen> {
                     Center(
                       child: GestureDetector(
                         onTap: _getImage,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundImage: _image ?? NetworkImage(user.imagen),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundImage:
+                                _image ?? NetworkImage(user.imagen),
+                          ),
                         ),
                       ),
                     ),

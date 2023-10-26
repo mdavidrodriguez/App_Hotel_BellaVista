@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/contacto.dart';
-import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/reservacionesUser.dart';
-import 'package:hotel_bella_vista/ui/pages/PanelPrincipal/widgets/reservation_card.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/contacto.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservacionesUser.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservation_card.dart';
 
 class CardsView extends StatelessWidget {
   const CardsView({super.key});

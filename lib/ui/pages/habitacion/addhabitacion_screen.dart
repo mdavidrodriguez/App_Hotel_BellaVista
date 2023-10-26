@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
 import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
+import 'package:hotel_bella_vista/ui/pages/habitacion/inputs_campos.dart';
 
 class EditHabitacionScreen extends StatelessWidget {
   const EditHabitacionScreen({super.key});
@@ -50,7 +49,7 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
     'VIP',
   ];
   final _formkey = GlobalKey<FormState>();
-  bool _saving_habitacion = false;
+  bool savingHabitacion = false;
 
   @override
   void initState() {
@@ -70,7 +69,7 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (_saving_habitacion) {
+    if (savingHabitacion) {
       return const Center(child: CircularProgressIndicator());
     }
     return Scaffold(
@@ -78,136 +77,57 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
         key: _formkey,
         child: Stack(
           children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/fondo.jpeg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+           const FondoFormulario(urlimage: 'assets/images/fondo.jpeg'),
             SingleChildScrollView(
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      TextFormField(
-                        controller: nrohabitextController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: 'Numero de Habitación',
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Por favor ingresa el numero de la habitación";
-                          }
-                          return null;
-                        },
-                      ),
+                      CamposInputs(
+                          capacidadTextController: nrohabitextController,
+                          label: 'Numero de habitación',
+                          mensajevalidacion:
+                              'Por favor ingrese el Nro de habitación',
+                          tipocampo: TextInputType.number),
                       const SizedBox(height: 10),
-                      DropdownButtonFormField<String>(
+                      DropdownMenuP(
                         value: selectedTipoHabitacion,
+                        options: tipoHabitacionOptions,
                         onChanged: (newValue) {
                           setState(() {
                             selectedTipoHabitacion = newValue;
                           });
                         },
-                        items: tipoHabitacionOptions.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText: 'Tipo de Habitación',
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
+                        label: 'Tipo de Habitación',
                       ),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        controller: preciNocheTextController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText: 'Precio Por Noche',
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Por favor ingrese el precio por noche";
-                          }
-                          return null;
-                        },
-                      ),
+                      CamposInputs(
+                          capacidadTextController: preciNocheTextController,
+                          label: 'Precio por Noche',
+                          mensajevalidacion:
+                              'Por favor ingrese el precio por noche',
+                          tipocampo: const TextInputType.numberWithOptions(
+                              decimal: true)),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        controller: descripcionTextController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText: 'Descripción ',
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Por favor ingrese la descripción";
-                          }
-                          return null;
-                        },
-                      ),
+                      CamposInputs(
+                          capacidadTextController: descripcionTextController,
+                          label: 'Descripción',
+                          mensajevalidacion: 'Por favor ingrese la descripción',
+                          tipocampo: TextInputType.text),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        controller: capacidadTextController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText: 'Capacidad ',
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Por favor ingrese la capacidad de la habitación";
-                          }
-                          return null;
-                        },
-                      ),
+                      CamposInputs(
+                          capacidadTextController: capacidadTextController,
+                          label: 'Capacidad',
+                          mensajevalidacion: 'Por favor ingrese la capacidad',
+                          tipocampo: TextInputType.number),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        controller: comodidadesTextController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          labelText: 'Comodidades ',
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Por favor ingrese las comodidades";
-                          }
-                          return null;
-                        },
-                      ),
+                      CamposInputs(
+                          capacidadTextController: comodidadesTextController,
+                          label: 'Comodidades',
+                          mensajevalidacion:
+                              'Por favor ingrese las comodidades de la habitación',
+                          tipocampo: TextInputType.text),
                       Row(
                         children: [
                           const Text('Disponible:'),
@@ -233,15 +153,7 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                             e.printError();
                           }
                         },
-                        child: SizedBox(
-                          width: 150,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: image != null
-                                ? Image.file(File(image!))
-                                : Image.asset('assets/images/take_photo.jpg'),
-                          ),
-                        ),
+                        child: ImageFile(image: image,imageAssets: 'assets/images/take_photo.jpg',)
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(

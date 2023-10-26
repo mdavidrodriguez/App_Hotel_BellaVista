@@ -153,6 +153,8 @@ class _LoginViewState extends State<LoginView> {
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, "/home");
       print("User is signip");
+      emailController.clear();
+      passwordController.clear();
     } else {
       print('Some error');
     }
@@ -178,7 +180,7 @@ class BotonNavigation extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Register()));
+                    MaterialPageRoute(builder: (context) => const Register()));
               },
               child: Text(
                 ' Registrate',

@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/detalle_habitacion_screen.dart';
+import 'package:hotel_bella_vista/ui/pages/home/itemDetalleHabitacion.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     ConsultasHabitacionController uc = Get.find();
@@ -15,16 +18,16 @@ class HomeScreen extends StatelessWidget {
           const HeaderWidget(),
           Expanded(
             child: Obx(() {
-              final List<HabitacionHotel>? _habitaciones =
+              final List<HabitacionHotel>? habitaciones =
                   uc.listaFinalHabitaciones;
               if (uc.listaFinalHabitaciones?.isEmpty == true) {
                 return const Center(child: CircularProgressIndicator());
               } else {
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _habitaciones?.length ?? 0,
+                  itemCount: habitaciones?.length ?? 0,
                   itemBuilder: (context, index) {
-                    final habitacion = _habitaciones![index];
+                    final habitacion = habitaciones![index];
                     return Card(
                       child: InkWell(
                         borderRadius: BorderRadius.circular(4.0),
@@ -40,36 +43,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      habitacion.descripcion,
-                                      style: const TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(habitacion.numeroHabitacion),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(habitacion.tipoHabitacion),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      habitacion.precioPorNoche.toString(),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: ItemDetallesHabitacion(habitacion: habitacion),
                             ),
                           ],
                         ),
@@ -94,7 +68,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
   Widget getImageWidget(String imagenes) {
     if (imagenes.startsWith("http")) {
       return Image.network(imagenes, height: 150, width: 150);
