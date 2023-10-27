@@ -1,15 +1,15 @@
 class ReservaHotel {
-  int id;
+  final String id;
   String nombreHuesped;
   String numeroReserva;
-  DateTime fechaCheckIn;
-  DateTime fechaCheckOut;
+  String fechaCheckIn;
+  String fechaCheckOut;
   String tipoHabitacion;
   double precioTotal;
   String metodoPago;
   String contactoHuesped;
-  int ocupacion;
-  List<HistorialReserva> historialReserva;
+  // int ocupacion;
+  // List<HistorialReserva> historialReserva;
 
   ReservaHotel({
     required this.id,
@@ -21,9 +21,25 @@ class ReservaHotel {
     required this.precioTotal,
     required this.metodoPago,
     required this.contactoHuesped,
-    required this.ocupacion,
-    required this.historialReserva,
+    // required this.ocupacion,
+    // required this.historialReserva,
   });
+
+  factory ReservaHotel.desdeDoc(String id, Map<String, dynamic> json) {
+    return ReservaHotel(
+        id: id,
+        nombreHuesped: json["nombreHuesped"] ?? '',
+        numeroReserva: json["numeroReserva"] ?? '',
+        fechaCheckIn: json["fechaCheckIn"] ?? '',
+        fechaCheckOut: json["fechaCheckOut"] ?? '',
+        tipoHabitacion: json["tipoHabitacion"] as String,
+        precioTotal: (json["precioTotal"] as num?)?.toDouble() ?? 0.0,
+        metodoPago: json["metodoPago"] ?? 'efectivo',
+        contactoHuesped: json["contactoHuesped"] ?? 'No tiene');
+  }
+  toJson() {
+    throw UnimplementedError();
+  }
 }
 
 class HistorialReserva {

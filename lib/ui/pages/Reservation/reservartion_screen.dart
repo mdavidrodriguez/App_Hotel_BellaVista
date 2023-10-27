@@ -15,50 +15,52 @@ class ReservationGrid extends StatelessWidget {
 
   final List<ReservaHotel> _reservation = [
     ReservaHotel(
-        id: 123,
+        id: "123",
         nombreHuesped: 'Mateo',
         numeroReserva: '28374',
-        fechaCheckIn: DateTime(2023),
-        fechaCheckOut: DateTime(2023),
+        fechaCheckIn: ("2023"),
+        fechaCheckOut: ("2023"),
         tipoHabitacion: 'Premium',
         precioTotal: 20000,
         metodoPago: 'Efectivo',
         contactoHuesped: '3104956725',
-        ocupacion: 3,
-        historialReserva: [
-          HistorialReserva(
-              fecha: DateTime(2023, 10, 15), accion: 'Pago confirmado')
-        ]),
+        // ocupacion: 3,
+        // historialReserva: [
+        //   HistorialReserva(
+        //       fecha: DateTime(2023, 10, 15), accion: 'Pago confirmado')
+        ),
     ReservaHotel(
-        id: 234,
+        id: "234",
         nombreHuesped: 'Mateo',
         numeroReserva: '28374',
-        fechaCheckIn: DateTime(2023),
-        fechaCheckOut: DateTime(2023),
+        fechaCheckIn: ("2023"),
+        fechaCheckOut: ("2023"),
         tipoHabitacion: 'Premium',
         precioTotal: 20000,
         metodoPago: 'Efectivo',
         contactoHuesped: '3104956725',
-        ocupacion: 3,
-        historialReserva: [
-          HistorialReserva(
-              fecha: DateTime(2023, 10, 15), accion: 'Pago confirmado')
-        ]),
+        // ocupacion: 3,
+        // historialReserva: [
+        //   HistorialReserva(
+        //       fecha: DateTime(2023, 10, 15), accion: 'Pago confirmado')
+        // ]
+        ),
     ReservaHotel(
-        id: 567,
+        id: "567",
         nombreHuesped: 'Mateo',
         numeroReserva: '28374',
-        fechaCheckIn: DateTime(2023),
-        fechaCheckOut: DateTime(2023),
+        fechaCheckIn: ("2023"),
+        fechaCheckOut: ("2023"),
         tipoHabitacion: 'Premium',
         precioTotal: 20000,
         metodoPago: 'Efectivo',
         contactoHuesped: '3104956725',
-        ocupacion: 3,
-        historialReserva: [
-          HistorialReserva(
-              fecha: DateTime(2023, 10, 15), accion: 'Pago confirmado')
-        ]),
+        // ocupacion: 3,
+        // historialReserva: [
+        //   HistorialReserva(
+        //       fecha: DateTime(2023, 10, 15), accion: 'Pago confirmado')
+        // ]
+        ),
   ];
 
   @override
