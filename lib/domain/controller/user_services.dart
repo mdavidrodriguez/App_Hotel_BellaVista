@@ -7,6 +7,10 @@ class UserController extends GetxController {
   final Rxn<List<UserData>> _servicioFirestore = Rxn<List<UserData>>([]);
   final FirebaseAuthService _authService = FirebaseAuthService();
 
+   Future<void> consultarUsuarios() async {
+    _servicioFirestore.value = await UserService.listarUsuarios();
+  }
+
   Future<void> consultarServicio() async {
     final user = await _authService.getCurrentUser();
 
@@ -18,4 +22,5 @@ class UserController extends GetxController {
   }
 
   List<UserData>? get listafinal => _servicioFirestore.value;
+
 }

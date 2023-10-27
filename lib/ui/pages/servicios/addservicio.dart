@@ -140,7 +140,7 @@ class _EditServicioFormState extends State<EditServicioForm> {
                         },
                         child: ImageFile(
                             image: image,
-                            imageAssets: 'assets/images/take_photo.jpg'),
+                            imageAssets: 'assets/images/camara.jpeg'),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
