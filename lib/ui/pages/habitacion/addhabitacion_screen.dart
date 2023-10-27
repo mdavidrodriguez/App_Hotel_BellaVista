@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
 import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
-import 'package:hotel_bella_vista/ui/pages/habitacion/inputs_campos.dart';
 
 class EditHabitacionScreen extends StatelessWidget {
   const EditHabitacionScreen({super.key});
@@ -36,7 +37,6 @@ class EditHabitacionForm extends StatefulWidget {
 class _EditHabitacionFormState extends State<EditHabitacionForm> {
   final nrohabitextController = TextEditingController();
   String? selectedTipoHabitacion;
-  int? selectedCapacidad;
   final preciNocheTextController = TextEditingController();
   final descripcionTextController = TextEditingController();
   final capacidadTextController = TextEditingController();
@@ -49,10 +49,8 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
     'Premium',
     'VIP',
   ];
-  List<int> capacidadOptions = List<int>.generate(10, (i) => i + 1);
-
   final _formkey = GlobalKey<FormState>();
-  bool savingHabitacion = false;
+  bool _saving_habitacion = false;
 
   @override
   void initState() {
@@ -64,7 +62,7 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
       preciNocheTextController.text =
           widget.habitacion!.precioPorNoche.toString();
       descripcionTextController.text = widget.habitacion!.descripcion;
-      selectedCapacidad = widget.habitacion!.capacidad;
+      capacidadTextController.text = widget.habitacion!.capacidad.toString();
       isDisponible = widget.habitacion!.estaDisponible;
       comodidadesTextController.text = widget.habitacion!.comodidades;
     }
@@ -72,7 +70,7 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (savingHabitacion) {
+    if (_saving_habitacion) {
       return const Center(child: CircularProgressIndicator());
     }
     return Scaffold(
@@ -80,82 +78,136 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
         key: _formkey,
         child: Stack(
           children: [
-            const FondoFormulario(urlimage: 'assets/images/fondo.jpeg'),
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/fondo.jpeg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             SingleChildScrollView(
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      CamposInputs(
-                          capacidadTextController: nrohabitextController,
-                          label: 'Numero de habitación',
-                          mensajevalidacion:
-                              'Por favor ingrese el Nro de habitación',
-                          tipocampo: TextInputType.number),
+                      TextFormField(
+                        controller: nrohabitextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'Numero de Habitación',
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingresa el numero de la habitación";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
-                      DropdownMenuP(
+                      DropdownButtonFormField<String>(
                         value: selectedTipoHabitacion,
-                        options: tipoHabitacionOptions,
                         onChanged: (newValue) {
                           setState(() {
                             selectedTipoHabitacion = newValue;
                           });
                         },
-                        label: 'Tipo de Habitación',
+                        items: tipoHabitacionOptions.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Tipo de Habitación',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
                       ),
                       const SizedBox(height: 10),
-                      CamposInputs(
-                          capacidadTextController: preciNocheTextController,
-                          label: 'Precio por Noche',
-                          mensajevalidacion:
-                              'Por favor ingrese el precio por noche',
-                          tipocampo: const TextInputType.numberWithOptions(
-                              decimal: true)),
+                      TextFormField(
+                        controller: preciNocheTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Precio Por Noche',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese el precio por noche";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
-                      CamposInputs(
-                          capacidadTextController: descripcionTextController,
-                          label: 'Descripción',
-                          mensajevalidacion: 'Por favor ingrese la descripción',
-                          tipocampo: TextInputType.text),
+                      TextFormField(
+                        controller: descripcionTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Descripción ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese la descripción";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              constraints: const BoxConstraints(maxWidth: 250),
-                              child: DropdownButtonFormField<int>(
-                                value: selectedCapacidad,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedCapacidad = newValue;
-                                  });
-                                },
-                                items: capacidadOptions.map((capacidad) {
-                                  return DropdownMenuItem<int>(
-                                    value: capacidad,
-                                    child: Text(capacidad.toString()),
-                                  );
-                                }).toList(),
-                                decoration: InputDecoration(
-                                  labelText: 'Capacidad por Persona',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                ),
-                                itemHeight: 48,
-                              ),
-                            ),
-                          ]),
+                      TextFormField(
+                        controller: capacidadTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Capacidad ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese la capacidad de la habitación";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
-                      CamposInputs(
-                          capacidadTextController: comodidadesTextController,
-                          label: 'Comodidades',
-                          mensajevalidacion:
-                              'Por favor ingrese las comodidades de la habitación',
-                          tipocampo: TextInputType.text),
+                      TextFormField(
+                        controller: comodidadesTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Comodidades ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese las comodidades";
+                          }
+                          return null;
+                        },
+                      ),
                       Row(
                         children: [
                           const Text('Disponible:'),
@@ -170,22 +222,27 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                         ],
                       ),
                       GestureDetector(
-                          onTap: () async {
-                            try {
-                              FilePickerResult? result =
-                                  await FilePicker.platform.pickFiles();
-                              if (result != null) {
-                                setState(
-                                    () => image = result.files.single.path);
-                              }
-                            } catch (e) {
-                              e.printError();
+                        onTap: () async {
+                          try {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles();
+                            if (result != null) {
+                              setState(() => image = result.files.single.path);
                             }
-                          },
-                          child: ImageFile(
-                            image: image,
-                            imageAssets: 'assets/images/camara.jpeg',
-                          )),
+                          } catch (e) {
+                            e.printError();
+                          }
+                        },
+                        child: SizedBox(
+                          width: 150,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: image != null
+                                ? Image.file(File(image!))
+                                : Image.asset('assets/images/take_photo.jpg'),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
