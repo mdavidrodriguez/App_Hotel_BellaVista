@@ -48,4 +48,16 @@ class UserService {
       'imagenes': imageUrl,
     });
   }
+
+  static Future<List<UserData>> listarUsuarios() async {
+    QuerySnapshot querySnapshot = await _db.collection("users").get();
+    List<UserData> lista = [];
+    for (var doc in querySnapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      lista.add(UserData.fromMap(doc.id, data));
+    }
+    return lista;
+  }
+
+
 }

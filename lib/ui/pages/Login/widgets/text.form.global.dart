@@ -23,7 +23,8 @@ class TextFormGlobal extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(6),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 7)
+            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 7),
+            
           ]),
       child: TextFormField(
           controller: controller,

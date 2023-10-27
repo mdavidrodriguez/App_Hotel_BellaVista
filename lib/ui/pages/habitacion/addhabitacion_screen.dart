@@ -36,6 +36,7 @@ class EditHabitacionForm extends StatefulWidget {
 class _EditHabitacionFormState extends State<EditHabitacionForm> {
   final nrohabitextController = TextEditingController();
   String? selectedTipoHabitacion;
+  int? selectedCapacidad;
   final preciNocheTextController = TextEditingController();
   final descripcionTextController = TextEditingController();
   final capacidadTextController = TextEditingController();
@@ -48,6 +49,8 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
     'Premium',
     'VIP',
   ];
+  List<int> capacidadOptions = List<int>.generate(10, (i) => i + 1);
+
   final _formkey = GlobalKey<FormState>();
   bool savingHabitacion = false;
 
@@ -61,7 +64,7 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
       preciNocheTextController.text =
           widget.habitacion!.precioPorNoche.toString();
       descripcionTextController.text = widget.habitacion!.descripcion;
-      capacidadTextController.text = widget.habitacion!.capacidad.toString();
+      selectedCapacidad = widget.habitacion!.capacidad;
       isDisponible = widget.habitacion!.estaDisponible;
       comodidadesTextController.text = widget.habitacion!.comodidades;
     }
@@ -77,7 +80,7 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
         key: _formkey,
         child: Stack(
           children: [
-           const FondoFormulario(urlimage: 'assets/images/fondo.jpeg'),
+            const FondoFormulario(urlimage: 'assets/images/fondo.jpeg'),
             SingleChildScrollView(
               child: SafeArea(
                 child: Padding(
@@ -116,11 +119,36 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                           mensajevalidacion: 'Por favor ingrese la descripción',
                           tipocampo: TextInputType.text),
                       const SizedBox(height: 10),
-                      CamposInputs(
-                          capacidadTextController: capacidadTextController,
-                          label: 'Capacidad',
-                          mensajevalidacion: 'Por favor ingrese la capacidad',
-                          tipocampo: TextInputType.number),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              constraints: const BoxConstraints(maxWidth: 250),
+                              child: DropdownButtonFormField<int>(
+                                value: selectedCapacidad,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    selectedCapacidad = newValue;
+                                  });
+                                },
+                                items: capacidadOptions.map((capacidad) {
+                                  return DropdownMenuItem<int>(
+                                    value: capacidad,
+                                    child: Text(capacidad.toString()),
+                                  );
+                                }).toList(),
+                                decoration: InputDecoration(
+                                  labelText: 'Capacidad por Persona',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                                itemHeight: 48,
+                              ),
+                            ),
+                          ]),
                       const SizedBox(height: 10),
                       CamposInputs(
                           capacidadTextController: comodidadesTextController,
@@ -142,19 +170,22 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                         ],
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          try {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
-                            if (result != null) {
-                              setState(() => image = result.files.single.path);
+                          onTap: () async {
+                            try {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles();
+                              if (result != null) {
+                                setState(
+                                    () => image = result.files.single.path);
+                              }
+                            } catch (e) {
+                              e.printError();
                             }
-                          } catch (e) {
-                            e.printError();
-                          }
-                        },
-                        child: ImageFile(image: image,imageAssets: 'assets/images/take_photo.jpg',)
-                      ),
+                          },
+                          child: ImageFile(
+                            image: image,
+                            imageAssets: 'assets/images/camara.jpeg',
+                          )),
                       const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {

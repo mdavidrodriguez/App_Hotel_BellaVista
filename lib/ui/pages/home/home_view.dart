@@ -1,15 +1,19 @@
+// ignore_for_file: prefer_final_fields
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hotel_bella_vista/domain/controller/user_services.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/room_card.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/home/homeScreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:hotel_bella_vista/ui/pages/perfil/listarusuarios.dart';
 import 'package:hotel_bella_vista/ui/pages/perfil/mostrarperfil.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/listarServicios.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key, required this.title});
+  const HomeView({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -17,17 +21,45 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final UserController sc = Get.find();
   int _selectedIndex = 0;
-  // ignore: prefer_final_fields
   static List<Widget> _sectionWidgets = [
     const HomeScreen(),
     const HabitacionkshelfScreen(),
-    const CardsView()
+    const CardsView(),
+  ];
+
+  final List<DrawerItem> drawerItems = [
+    DrawerItem(
+      icon: const Icon(Icons.home),
+      title: const Text('Habitaciones'),
+      screen: const ListarHabitaciones(),
+    ),
+    DrawerItem(
+      icon: const Icon(Icons.room_service_outlined),
+      title: const Text('Servicios'),
+      screen: const ListarServicios(),
+    ),
+    DrawerItem(
+      icon: const Icon(Icons.supervised_user_circle),
+      title: const Text('Perfil'),
+      screen: const Userscreen(),
+    ),
+    DrawerItem(
+      icon: const Icon(Icons.supervisor_account_rounded),
+      title: const Text('Usuarios'),
+      screen: const ListarUsuarios(),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    sc.consultarServicio();
     final colors = Theme.of(context).colorScheme;
+    bool isGoogleSignIn =
+        FirebaseAuth.instance.currentUser?.providerData[0].providerId ==
+            'google.com';
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -38,7 +70,6 @@ class _HomeViewState extends State<HomeView> {
         ),
         elevation: 0,
         centerTitle: true,
-        // automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.only(bottom: 5, right: 5),
@@ -49,32 +80,65 @@ class _HomeViewState extends State<HomeView> {
               },
               child: const Icon(Icons.login_outlined),
             ),
-          )
+          ),
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
+        child: ListView.builder(
+          itemCount: drawerItems.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return DrawerHeader(
                 decoration: BoxDecoration(color: colors.primary),
                 padding: EdgeInsets.zero,
-                child: const Center(
-                  child: Text('Menu de Opciones',
-                      style: TextStyle(fontSize: 20, color: Colors.white)),
-                )),
-            const ItemDrawer(
-                icono: Icon(Icons.home),
-                pantalla: ListarHabitaciones(),
-                titulo: Text('Habitaciones')),
-            const ItemDrawer(
-                titulo: Text('Servicios'),
-                pantalla: ListarServicios(),
-                icono: Icon(Icons.room_service_outlined)),
-            const ItemDrawer(
-                titulo: Text('Perfil'),
-                pantalla: Userscreen(),
-                icono: Icon(Icons.supervised_user_circle)),
-          ],
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: CircleAvatar(
+                          child: ClipOval(
+                            child: Image.network(
+                              isGoogleSignIn
+                                  ? FirebaseAuth.instance.currentUser!.photoURL!
+                                  : sc.listafinal![index].imagen,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        isGoogleSignIn
+                            ? FirebaseAuth.instance.currentUser!.displayName!
+                            : "${sc.listafinal![index].nombre} - ${sc.listafinal![index].apellido}",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              final itemIndex = index - 1;
+              return ListTile(
+                leading: drawerItems[itemIndex].icon,
+                title: drawerItems[itemIndex].title,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => drawerItems[itemIndex].screen,
+                    ),
+                  );
+                },
+              );
+            }
+          },
         ),
       ),
       body: IndexedStack(
@@ -126,26 +190,14 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-class ItemDrawer extends StatelessWidget {
-  const ItemDrawer({
-    super.key,
-    required this.titulo,
-    required this.pantalla,
-    required this.icono,
-  });
+class DrawerItem {
+  final Icon icon;
+  final Text title;
+  final Widget screen;
 
-  final Text titulo;
-  final Widget pantalla;
-  final Icon icono;
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: icono,
-      title: titulo,
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => pantalla));
-      },
-    );
-  }
+  DrawerItem({
+    required this.icon,
+    required this.title,
+    required this.screen,
+  });
 }

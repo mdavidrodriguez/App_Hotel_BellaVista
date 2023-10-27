@@ -14,6 +14,7 @@ import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart'
 import 'package:hotel_bella_vista/ui/pages/habitacion/addhabitacion_screen.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
+import 'package:hotel_bella_vista/ui/pages/perfil/listarusuarios.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/addservicio.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/listarservicios.dart';
 
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           '/listarHabitaciones': (context) => const ListarHabitaciones(),
           '/editarservicio': (context) => const EditServicioScreen(),
           '/listarservicios': (context) => const ListarServicios(),
+          '/listarUsuarios': (context) => const ListarUsuarios(),
         },
       ),
     );

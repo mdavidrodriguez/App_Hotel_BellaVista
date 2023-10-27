@@ -87,7 +87,6 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(
                     height: 15,
                   ),
-                  // Campo email
                   TextFormGlobal(
                     controller: emailController,
                     text: 'Email',
@@ -103,7 +102,6 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(
                     height: 10,
                   ),
-                  // Password input
                   TextFormGlobal(
                     controller: passwordController,
                     text: 'Password',
