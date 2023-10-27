@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/servicios_services.dart';
 import 'package:hotel_bella_vista/domain/controller/servicios_controller.dart';
 import 'package:hotel_bella_vista/domain/models/servicios.dart';
-import 'package:hotel_bella_vista/ui/pages/habitacion/inputs_campos.dart';
 
 class EditServicioScreen extends StatelessWidget {
   const EditServicioScreen({super.key});
@@ -68,41 +69,93 @@ class _EditServicioFormState extends State<EditServicioForm> {
         key: _formKey,
         child: Stack(
           children: [
-            const FondoFormulario(urlimage: 'assets/images/fondo.jpeg'),
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/fondo.jpeg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             SingleChildScrollView(
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      CamposInputs(
-                          capacidadTextController: nombreTextController,
-                          label: 'Nombre del Servicio',
-                          mensajevalidacion:
-                              'Por favor ingrese el nombre del servicio',
-                          tipocampo: TextInputType.text),
+                      TextFormField(
+                        controller: nombreTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'Nombre del Servicio',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingresa el nombre del servicio";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
-                      CamposInputs(
-                          capacidadTextController: descripcionTextController,
-                          label: 'Descripción',
-                          mensajevalidacion:
-                              'Por favor ingrese la descripción del servicio',
-                          tipocampo: TextInputType.text),
+                      TextFormField(
+                        controller: descripcionTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Descripción ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese la descripción";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
-                      CamposInputs(
-                          capacidadTextController: costoTextController,
-                          label: 'Costo del servicio',
-                          mensajevalidacion:
-                              'Por favor ingrese el costo del servicio',
-                          tipocampo: const TextInputType.numberWithOptions(
-                              decimal: true)),
+                      TextFormField(
+                        controller: costoTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Costo',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese el costo del servicio";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
-                      CamposInputs(
-                          capacidadTextController: tipoTextController,
-                          label: 'Tipo de servicio',
-                          mensajevalidacion:
-                              'Por favor ingrese el tipo de servicio',
-                          tipocampo: TextInputType.text),
+                      TextFormField(
+                        controller: tipoTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Tipo del Servicio',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese el tipo del servicio";
+                          }
+                          return null;
+                        },
+                      ),
                       const SizedBox(height: 10),
                       Row(
                         children: [
@@ -120,12 +173,24 @@ class _EditServicioFormState extends State<EditServicioForm> {
                       const SizedBox(
                         height: 10,
                       ),
-                      CamposInputs(
-                          capacidadTextController: capacidadTextController,
-                          label: 'Capacidad',
-                          mensajevalidacion:
-                              'Por favor ingrese la cantidad disponible del servicio',
-                          tipocampo: TextInputType.number),
+                      TextFormField(
+                        controller: capacidadTextController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Capacidad ',
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Por favor ingrese la Cantidad disponible del servicio";
+                          }
+                          return null;
+                        },
+                      ),
                       GestureDetector(
                         onTap: () async {
                           try {
@@ -138,9 +203,15 @@ class _EditServicioFormState extends State<EditServicioForm> {
                             e.printError();
                           }
                         },
-                        child: ImageFile(
-                            image: image,
-                            imageAssets: 'assets/images/camara.jpeg'),
+                        child: SizedBox(
+                          width: 150,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: image != null
+                                ? Image.file(File(image!))
+                                : Image.asset('assets/images/take_photo.jpg'),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
@@ -208,6 +279,6 @@ class _EditServicioFormState extends State<EditServicioForm> {
         }
       }
     }
-    Get.toNamed('/listarservicios');
+    Get.offAndToNamed('/listarServicios');
   }
 }

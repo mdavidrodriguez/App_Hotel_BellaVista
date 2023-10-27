@@ -1,12 +1,17 @@
+<<<<<<< HEAD
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+=======
+import 'package:cloud_firestore/cloud_firestore.dart';
+>>>>>>> d5980e2 (habitaciones,servicios)
 import 'package:hotel_bella_vista/domain/models/users.dart';
 
 class UserService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
+<<<<<<< HEAD
 
   static Future<List<UserData>> listarServiciosPorUserEmail(String userEmail) async {
     QuerySnapshot querySnapshot =
@@ -50,6 +55,9 @@ class UserService {
   }
 
   static Future<List<UserData>> listarUsuarios() async {
+=======
+  static Future<List<UserData>> listarServicios() async {
+>>>>>>> d5980e2 (habitaciones,servicios)
     QuerySnapshot querySnapshot = await _db.collection("users").get();
     List<UserData> lista = [];
     for (var doc in querySnapshot.docs) {
@@ -58,6 +66,9 @@ class UserService {
     }
     return lista;
   }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d5980e2 (habitaciones,servicios)
 }

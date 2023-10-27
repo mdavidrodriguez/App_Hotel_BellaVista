@@ -6,8 +6,6 @@ import 'package:hotel_bella_vista/ui/pages/habitacion/detalle_habitacion_screen.
 import 'package:hotel_bella_vista/ui/pages/home/itemDetalleHabitacion.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     ConsultasHabitacionController uc = Get.find();
@@ -18,16 +16,16 @@ class HomeScreen extends StatelessWidget {
           const HeaderWidget(),
           Expanded(
             child: Obx(() {
-              final List<HabitacionHotel>? habitaciones =
+              final List<HabitacionHotel>? _habitaciones =
                   uc.listaFinalHabitaciones;
               if (uc.listaFinalHabitaciones?.isEmpty == true) {
                 return const Center(child: CircularProgressIndicator());
               } else {
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: habitaciones?.length ?? 0,
+                  itemCount: _habitaciones?.length ?? 0,
                   itemBuilder: (context, index) {
-                    final habitacion = habitaciones![index];
+                    final habitacion = _habitaciones![index];
                     return Card(
                       child: InkWell(
                         borderRadius: BorderRadius.circular(4.0),
@@ -43,7 +41,36 @@ class HomeScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Expanded(
-                              child: ItemDetallesHabitacion(habitacion: habitacion),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      habitacion.descripcion,
+                                      style: const TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(habitacion.numeroHabitacion),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(habitacion.tipoHabitacion),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      habitacion.precioPorNoche.toString(),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
