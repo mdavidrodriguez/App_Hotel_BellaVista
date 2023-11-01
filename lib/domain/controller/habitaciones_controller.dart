@@ -10,14 +10,16 @@ class ConsultasHabitacionController extends GetxController {
     _habitacionFirestore.value = await HabitacionesService.listarHabitaciones();
   }
 
-  Future<void> actualizarHabitacion(String id, Map<String, dynamic> datos) async {
+  Future<void> actualizarHabitacion(
+      String id, Map<String, dynamic> datos) async {
     await HabitacionesService.actualizarHabitacion(id, datos);
   }
-    Future<void> eliminarHabitacion(String id) async {
+
+  Future<void> eliminarHabitacion(String id) async {
     await HabitacionesService.eliminarHabitacion(id);
-    _habitacionFirestore.value?.removeWhere((habitacion) => habitacion.id == id);
+    _habitacionFirestore.value
+        ?.removeWhere((habitacion) => habitacion.id == id);
   }
-  
 
   List<HabitacionHotel>? get listaFinalHabitaciones =>
       _habitacionFirestore.value;
