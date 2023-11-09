@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
-  FirebaseAuth auth = FirebaseAuth.instance;
+ static FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future<dynamic> crearRegistroEmail(dynamic email, dynamic pass) async {
+   static Future<dynamic> crearRegistroEmail(dynamic email, dynamic pass) async {
     try {
       UserCredential usuario = await auth.createUserWithEmailAndPassword(
           email: email, password: pass);
@@ -33,7 +33,7 @@ class FirebaseAuthService {
     }
   }
 
-  Future<dynamic> ingresarEmail(dynamic email, dynamic pass) async {
+ static Future<dynamic> ingresarEmail(dynamic email, dynamic pass) async {
     try {
       UserCredential usuario =
           await auth.signInWithEmailAndPassword(email: email, password: pass);
@@ -88,7 +88,7 @@ class FirebaseAuthService {
     return auth.authStateChanges().first;
   }
 
-  Future<void> storeUserDataInFirestore({
+  static Future<void> storeUserDataInFirestore({
     required String userId,
     required String identificacion,
     required String nombre,
