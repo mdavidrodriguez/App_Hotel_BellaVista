@@ -13,7 +13,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
+  static final FirebaseAuthService _auth = FirebaseAuthService();
 
   final TextEditingController identificacionController =
       TextEditingController();
@@ -196,7 +196,7 @@ class _RegisterState extends State<Register> {
     User? user = await _auth.signupWithEmailAndPassword(email, password);
 
     if (user != null) {
-      await _auth.storeUserDataInFirestore(
+      await FirebaseAuthService.storeUserDataInFirestore(
         userId: user.uid,
         identificacion: identificacion,
         nombre: nombre,

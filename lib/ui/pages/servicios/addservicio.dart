@@ -51,7 +51,7 @@ class _EditServicioFormState extends State<EditServicioForm> {
     if (widget.servicio != null) {
       nombreTextController.text = widget.servicio!.nombre;
       descripcionTextController.text = widget.servicio!.descripcion;
-      costoTextController.text = widget.servicio!.costo.toStringAsFixed(2);
+      costoTextController.text = widget.servicio!.costo.toString();
       tipoTextController.text = widget.servicio!.tipo;
       capacidadTextController.text = widget.servicio!.capacidad.toString();
       isDisponible = widget.servicio!.estaDisponible;
