@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
+
 import 'package:hotel_bella_vista/domain/models/reservation.dart';
 
 class ReservasService {
@@ -10,22 +10,20 @@ class ReservasService {
       toFirestore: (serv, _) => serv.toJson());
 
   Future<String> saveReservas(
-      String nombreHuesped,
       String numeroReserva,
+      String numeroHabitacion,
+      String servicioReserva,
+      String numeroPersonas,
       String fechaCheckIn,
       String fechaCheckOut,
-      String tipoHabitacion,
       double precioTotal,
-      String metodoPago) async {
+      ) async {
     var reference = FirebaseFirestore.instance.collection("reservas");
     var result = await reference.add({
-      'nombreHuesped': nombreHuesped,
       'numeroReserva': numeroReserva,
       'fechaCheckIn': fechaCheckIn,
       'fechaCheckOut': fechaCheckOut,
-      'tipoHabitacion': tipoHabitacion,
       'precioTotal': precioTotal,
-      'metodoPago': metodoPago
     });
     return Future.value(result.id);
   }

@@ -1,23 +1,94 @@
+
+import 'dart:math';
+
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hotel_bella_vista/data/services/reservas_service.dart';
+import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
+import 'package:hotel_bella_vista/domain/controller/servicios_controller.dart';
+import 'package:hotel_bella_vista/domain/models/reservation.dart';
+
+class ReservasScreen extends StatelessWidget {
+  const ReservasScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final ReservaHotel? reservas = Get.arguments as ReservaHotel?;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Registrar reserva"),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      body: ReservasRegister(reserva: reservas),
+    );
+  }
+}
 
 class ReservasRegister extends StatefulWidget {
-  const ReservasRegister({super.key});
+  final ReservaHotel? reserva;
+  const ReservasRegister({super.key, required this.reserva});
 
   @override
   State<ReservasRegister> createState() => _ReservasRegisterState();
 }
 
 class _ReservasRegisterState extends State<ReservasRegister> {
-  String reserveDate = "";
-  String roomType = "";
-  double reserveNumberOfRooms = 0.0;
-  int numberOfPeople = 0;
+  TextEditingController reserveNumber = TextEditingController();
+  TextEditingController numberOfPeople = TextEditingController();
+  String selectedServices = "";
+  String selectedRoom = "";
   TextEditingController dateOfInput = TextEditingController();
   TextEditingController dateOfOutput = TextEditingController();
+  TextEditingController total = TextEditingController();
+
+  double costoHabitacion = 0.0;
+  double costoServicio = 0.0;
+
+  double calcularTotal() {
+    // Sumar el precio de la habitación seleccionada
+    double totalPagar = 0.0;
+
+    if (selectedRoom.isNotEmpty) {
+      totalPagar += costoHabitacion;
+    }
+
+    // Sumar el precio del servicio seleccionado
+    if (selectedServices.isNotEmpty) {
+      totalPagar += costoServicio;
+    }
+
+    return totalPagar;
+  }
+
+  void actualizarTotal() {
+    double totalPagar = calcularTotal();
+    setState(() {
+      total.text = totalPagar.toString();
+    });
+  }
+
+  // final _formKey = GlobalKey<FormState>();
+  // bool _saving_habitacion = false;
+
+  @override
+  void initState() {
+    super.initState();
+    reserveNumber.text = Random().nextInt(100000).toString();
+    total.text = calcularTotal().toString();
+  }
 
   @override
   Widget build(BuildContext context) {
+    ConsultasServiciosController sc = Get.find();
+    sc.consultarServicio();
+
+    ConsultasHabitacionController uc = Get.find();
+    uc.consultarHabitaciones();
+
+    print(sc.listaFinalServicio);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -36,36 +107,99 @@ class _ReservasRegisterState extends State<ReservasRegister> {
               children: [
                 // Campo de número de habitación
                 TextField(
+                  controller: reserveNumber,
                   decoration: InputDecoration(
-                    labelText: "Fecha de reserva",
+                    labelText: "Numero de reserva",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                     filled: true,
                     fillColor: Colors.white,
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      reserveDate = value;
-                    });
-                  },
+                  readOnly: true,
+                  // onChanged: (value) {
+                  //   setState(() {
+                  //     reserveNumber.text = Random().nextInt(100000).toString();
+                  //   });
+                  // },
                 ),
                 const SizedBox(height: 10),
-                // Campo de tipo de habitación
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Tipo de Habitación",
+
+                DropdownButtonFormField(
+                  items: uc.listaFinalHabitaciones!.map((e) {
+                    return DropdownMenuItem(
+                      value: e
+                          .numeroHabitacion, // Supongo que "nombre" es el campo que deseas mostrar
+                      //child: Text(e.nombre),
+                      child: Text(
+                          "${e.numeroHabitacion} ${e.tipoHabitacion} - ${e.precioPorNoche}"),
+                    );
+                   
+                  }).toList(),
+                  onChanged: (dynamic value) {
+                    selectedRoom = value as String;
+                    setState(() {
+                      costoHabitacion = uc.listaFinalHabitaciones!
+                          .firstWhere((element) =>
+                              element.numeroHabitacion == selectedRoom)
+                          .precioPorNoche;
+                      actualizarTotal();
+                      print("Habitacion seleccionada: $selectedRoom");
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: "Habitaciones",
+                    prefixIcon: Icon(
+                      Icons.room_preferences_rounded,
+                      color: Colors.blueGrey,
+                    ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     filled: true,
                     fillColor: Colors.white,
                   ),
-                  onChanged: (value) {
+                  dropdownColor: Colors.white,
+                ),
+
+                const SizedBox(height: 10),
+
+                DropdownButtonFormField(
+                  items: sc.listaFinalServicio!.map((e) {
+                    return DropdownMenuItem(
+                      value: e
+                          .nombre, // Supongo que "nombre" es el campo que deseas mostrar
+                      //child: Text(e.nombre),
+                      child: Text("${e.nombre} - ${e.costo}"),
+                    );
+                  }).toList(),
+                  onChanged: (dynamic value) {
+                    selectedServices = value as String;
+
                     setState(() {
-                      roomType = value;
+                      costoServicio = sc.listaFinalServicio!
+                          .firstWhere(
+                              (element) => element.nombre == selectedServices)
+                          .costo;
+
+                      actualizarTotal();
                     });
                   },
+                  isDense: true,
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                    labelText: "Servicios",
+                    prefixIcon: Icon(
+                      Icons.alarm_add,
+                      color: Colors.blueGrey,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  dropdownColor: Colors.white,
                 ),
                 const SizedBox(height: 10),
                 // Campo de número de personas
@@ -81,7 +215,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     setState(() {
-                      numberOfPeople = int.tryParse(value) ?? 0;
+                      numberOfPeople.text = (value);
                     });
                   },
                 ),
@@ -89,7 +223,10 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                 TextField(
                   controller: dateOfInput,
                   decoration: InputDecoration(
-                    icon: const Icon(Icons.calendar_today_rounded),
+                    prefixIcon: const Icon(
+                      Icons.calendar_today_rounded,
+                      color: Colors.blueGrey,
+                    ),
                     labelText: "Fecha de Entrada",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -97,6 +234,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                     filled: true,
                     fillColor: Colors.white,
                   ),
+                  readOnly: true,
                   onTap: () async {
                     DateTime? pickedTime = await showDatePicker(
                       context: context,
@@ -117,7 +255,10 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                 const SizedBox(height: 20),
                 TextField(
                   decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today_rounded),
+                    prefixIcon: const Icon(
+                      Icons.calendar_today_rounded,
+                      color: Colors.blueGrey,
+                    ),
                     labelText: "Fecha de Salida",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -125,6 +266,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                     filled: true,
                     fillColor: Colors.white,
                   ),
+                  readOnly: true,
                   keyboardType: TextInputType.text,
                   onTap: () async {
                     DateTime? pickedTime2 = await showDatePicker(
@@ -136,22 +278,46 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                     print("time: $pickedTime2");
                     if (pickedTime2 != null) {
                       setState(() {
-                        dateOfInput.text =
+                        dateOfOutput.text =
                             formatDate(pickedTime2, [dd, '-', mm, '-', yyyy]);
                         print("Variable: $dateOfInput");
                       });
                     }
                   },
                 ),
+
+                const SizedBox(height: 10),
+
+                TextField(
+                  controller: total,
+                  decoration: InputDecoration(
+                    labelText: "Total a pagar",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  readOnly: true,
+                  onChanged: (value) {
+                    setState(() {
+                      total.text = calcularTotal().toString();
+                    });
+                  },
+                ),
+
                 const SizedBox(height: 20),
                 // Botón para enviar el formulario
                 ElevatedButton(
                   onPressed: () {
                     // Aquí puedes manejar la información del formulario, por ejemplo, enviarla a una base de datos.
-                    print("Número de Habitación: $reserveDate");
-                    print("Tipo de Habitación: $roomType");
-                    print("Precio por Noche: $reserveNumberOfRooms");
-                    print("Número de Personas: $numberOfPeople");
+                    print("Numero de reserva: ${reserveNumber.text}");
+                    print("Habitación seleccionada: ${selectedRoom}");
+                    print("Servicios: ${selectedServices}");
+                    print("Fecha de llegada: ${dateOfInput.text}");
+                    print("Fecha de salida: ${dateOfOutput.text}");
+                    print("Número de Personas: ${numberOfPeople.text}");
+                    print("Total: ${total.text}");
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -173,5 +339,28 @@ class _ReservasRegisterState extends State<ReservasRegister> {
         },
       ),
     );
+  }
+
+  void saveReserva(BuildContext context) async {
+    var numeroReserva = reserveNumber.text;
+    var numeroHabitacionReserva = selectedRoom;
+    var servicioReserva = selectedServices;
+    var numeroPersonasReserva = numberOfPeople;
+    var fechaIngreso = dateOfInput.text;
+    var fechaSalida = dateOfOutput.text;
+    var totalAPagar = double.parse(total.text);
+
+    if (widget.reserva == null) {
+      String newReservaId = await ReservasService().saveReservas(
+          numeroReserva,
+          numeroHabitacionReserva,
+          servicioReserva,
+          numeroPersonasReserva.toString(),
+          fechaIngreso,
+          fechaSalida,
+          totalAPagar);
+          print(newReservaId);
+    }
+    Get.offNamed('');
   }
 }

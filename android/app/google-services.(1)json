@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "280883714144",
+    "project_id": "hotel-bellavista-4f789",
+    "storage_bucket": "hotel-bellavista-4f789.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280883714144:android:3a8c02c3277b5849964b05",
+        "android_client_info": {
+          "package_name": "com.movilmsb.hotel_bellavista"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8YCarbSKYaMUJpCzMOwDvAfO6E3ska28"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
