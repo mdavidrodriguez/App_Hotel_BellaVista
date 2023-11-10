@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
+import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 import 'package:hotel_bella_vista/data/state/state.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
@@ -47,6 +48,39 @@ class MyApp extends StatelessWidget {
           '/listarservicios': (context) => const ListarServicios(),
           '/listarUsuarios': (context) => const ListarUsuarios(),
         },
+//         onGenerateRoute: (settings) {
+//   return MaterialPageRoute<dynamic>(
+//     builder: (context) {
+//       if (settings.name == '/panel') {
+//         // Obtén el rol del usuario desde Firestore
+//         FirebaseAuthService.getUserRoleFromFirestore().then((userRole) {
+//           if (userRole == 'admin') {
+//             Navigator.push(context, MaterialPageRoute(builder: (context) => const PanelView()));
+//           } else {
+//             Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeView(title: 'Bella vista')));
+//           }
+//         });
+
+//         return Container(); // Devuelve un widget temporal mientras se resuelve la lógica asincrónica.
+//       } else if (settings.name == '/reservation/register') {
+//         // Obtén el rol del usuario desde Firestore
+//         FirebaseAuthService.getUserRoleFromFirestore().then((userRole) {
+//           if (userRole == 'admin') {
+//             Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservasRegister()));
+//           } else {
+//             Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeView(title: 'Bella vista')));
+//           }
+//         });
+
+//         return Container(); // Devuelve un widget temporal mientras se resuelve la lógica asincrónica.
+//       }
+
+//       // Otras rutas personalizadas según el rol del usuario
+
+//       return Container(); // Devuelve un widget temporal mientras se resuelve la lógica asincrónica.
+//     },
+//   );
+// },
       ),
     );
   }

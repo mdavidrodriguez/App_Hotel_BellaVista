@@ -3,21 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
- static FirebaseAuth auth = FirebaseAuth.instance;
+  static FirebaseAuth auth = FirebaseAuth.instance;
 
-   static Future<dynamic> crearRegistroEmail(dynamic email, dynamic pass) async {
+  static Future<dynamic> crearRegistroEmail(dynamic email, dynamic pass) async {
     try {
       UserCredential usuario = await auth.createUserWithEmailAndPassword(
           email: email, password: pass);
 
       await storeUserDataInFirestore(
-        userId: usuario.user!.uid,
-        identificacion: '',
-        nombre: '',
-        apellido: '',
-        telefono: '',
-        email: email,
-      );
+          userId: usuario.user!.uid,
+          identificacion: '',
+          nombre: '',
+          apellido: '',
+          telefono: '',
+          email: email,
+          role: '');
 
       return usuario;
     } on FirebaseAuthException catch (e) {
@@ -33,7 +33,7 @@ class FirebaseAuthService {
     }
   }
 
- static Future<dynamic> ingresarEmail(dynamic email, dynamic pass) async {
+  static Future<dynamic> ingresarEmail(dynamic email, dynamic pass) async {
     try {
       UserCredential usuario =
           await auth.signInWithEmailAndPassword(email: email, password: pass);
@@ -63,7 +63,7 @@ class FirebaseAuthService {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
- Future<User?> singInWithAndPassword(String email, String password) async {
+  Future<User?> singInWithAndPassword(String email, String password) async {
     try {
       UserCredential credential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -73,6 +73,7 @@ class FirebaseAuthService {
     }
     return null;
   }
+
   Future<User?> signupWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -84,9 +85,31 @@ class FirebaseAuthService {
     }
     return null;
   }
-   Future<User?> getCurrentUser() {
+
+
+Future<String?> getUserRoleFromFirestore(String userId) async {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final DocumentReference userDocRef = firestore.collection('users').doc(userId);
+
+  try {
+    final DocumentSnapshot userDoc = await userDocRef.get();
+    if (userDoc.exists) {
+      final userData = userDoc.data() as Map<String, dynamic>;
+      final String? userRole = userData['role'];
+      return userRole;
+    } else {
+      return null; 
+    }
+  } catch (e) {
+    print('Error al obtener el rol del usuario desde Firestore: $e');
+    return null;
+  }
+}
+
+  Future<User?> getCurrentUser() {
     return auth.authStateChanges().first;
   }
+
 
   static Future<void> storeUserDataInFirestore({
     required String userId,
@@ -95,6 +118,7 @@ class FirebaseAuthService {
     required String apellido,
     required String telefono,
     required String email,
+    required String role,
   }) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     final CollectionReference userCollection = firestore.collection('users');
@@ -106,6 +130,7 @@ class FirebaseAuthService {
         'apellido': apellido,
         'telefono': telefono,
         'email': email,
+        'role': role
       });
     } catch (e) {
       print("Error storing user data in Firestore: $e");
