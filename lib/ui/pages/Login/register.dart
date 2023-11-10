@@ -23,6 +23,11 @@ class _RegisterState extends State<Register> {
   final TextEditingController telefonoController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  String? selectedRol;
+  List<String> tipouser = [
+    'admin',
+    'user',
+  ];
 
   final _formkey = GlobalKey<FormState>();
 
@@ -169,6 +174,31 @@ class _RegisterState extends State<Register> {
                   const SizedBox(
                     height: 10,
                   ),
+                  DropdownButtonFormField<String>(
+                    value: selectedRol,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedRol = newValue;
+                      });
+                    },
+                    items: tipouser.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText: 'Rol',
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   ButtonRegister(onTap: () {
                     if (_formkey.currentState!.validate()) {
                       _signUp();
@@ -188,23 +218,26 @@ class _RegisterState extends State<Register> {
   void _signUp() async {
     String identificacion = identificacionController.text;
     String nombre = nombreController.text;
+    var tiporol = selectedRol;
     String apellido = apellidoController.text;
     String telefono = telefonoController.text;
     String email = emailController.text;
     String password = passwordController.text;
+    // String role = role
 
     User? user = await _auth.signupWithEmailAndPassword(email, password);
 
     if (user != null) {
       await FirebaseAuthService.storeUserDataInFirestore(
-        userId: user.uid,
-        identificacion: identificacion,
-        nombre: nombre,
-        apellido: apellido,
-        telefono: telefono,
-        email: email,
-      );
+          userId: user.uid,
+          identificacion: identificacion,
+          nombre: nombre,
+          apellido: apellido,
+          telefono: telefono,
+          email: email,
+          role: tiporol.toString());
 
+      // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, "/home");
       identificacionController.clear();
       nombreController.clear();

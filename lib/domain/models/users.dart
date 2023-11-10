@@ -6,27 +6,27 @@ class UserData {
   final String telefono;
   final String email;
   final String imagen;
+  final String role;
 
-
-  UserData({
-    required this.id,
-    required this.identificacion,
-    required this.nombre,
-    required this.apellido,
-    required this.telefono,
-    required this.email,
-    required this.imagen
-  });
+  UserData(
+      {required this.id,
+      required this.identificacion,
+      required this.nombre,
+      required this.apellido,
+      required this.telefono,
+      required this.email,
+      required this.imagen,
+      required this.role});
 
   factory UserData.fromMap(String id, Map<String, dynamic> map) {
     return UserData(
-      id: id,
-      identificacion: map['identificacion'] ?? '',
-      nombre: map['nombre'] ?? '',
-      apellido: map['apellido'] ?? '',
-      telefono: map['telefono'] ?? '',
-      email: map['email'] ?? '',
-      imagen: map['imagenes'] ?? '',
-    );
+        id: id,
+        identificacion: map['identificacion'] ?? '',
+        nombre: map['nombre'] ?? '',
+        apellido: map['apellido'] ?? '',
+        telefono: map['telefono'] ?? '',
+        email: map['email'] ?? '',
+        imagen: map['imagenes'] ?? '',
+        role: map['role'] ?? '');
   }
 }
