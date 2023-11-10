@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginView(),
           '/register': (context) => const Register(),
           '/panel': (context) => const PanelView(),
-          '/reservation/register': (context) => const ReservasRegister(),
+          '/reservation/register': (context) => const ReservasScreen(),
           '/contacto': (context) => const ContactScreen(),
           '/reservationAdmin': (context) => const ReservationScreen(),
           '/reservashelf': (context) => const HabitacionkshelfScreen(),
