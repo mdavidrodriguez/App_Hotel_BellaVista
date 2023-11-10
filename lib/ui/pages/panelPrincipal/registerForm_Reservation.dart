@@ -1,5 +1,9 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
+import 'package:hotel_bella_vista/domain/controller/servicios_controller.dart';
+
 
 class ReservasRegister extends StatefulWidget {
   const ReservasRegister({super.key});
@@ -13,11 +17,23 @@ class _ReservasRegisterState extends State<ReservasRegister> {
   String roomType = "";
   double reserveNumberOfRooms = 0.0;
   int numberOfPeople = 0;
+  String selectedServices = "";
+
+  String selectedRoom = "";
+
   TextEditingController dateOfInput = TextEditingController();
   TextEditingController dateOfOutput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    ConsultasServiciosController sc = Get.find();
+    sc.consultarServicio();
+
+    ConsultasHabitacionController uc = Get.find();
+    uc.consultarHabitaciones();
+
+    print(sc.listaFinalServicio);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -51,21 +67,69 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                   },
                 ),
                 const SizedBox(height: 10),
-                // Campo de tipo de habitación
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Tipo de Habitación",
+
+                DropdownButtonFormField(
+                  items: uc.listaFinalHabitaciones!.map((e) {
+                    return DropdownMenuItem(
+                      value: e
+                          .numeroHabitacion, // Supongo que "nombre" es el campo que deseas mostrar
+                      //child: Text(e.nombre),
+                      child: Text(
+                          "${e.numeroHabitacion} ${e.tipoHabitacion} - ${e.precioPorNoche}"),
+                    );
+                  }).toList(),
+                  onChanged: (dynamic value) {
+                    selectedRoom = value as String;
+                    setState(() {
+                      print("Habitacion seleccionada: $selectedRoom");
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: "Habitaciones",
+                    prefixIcon: Icon(
+                      Icons.room_preferences_rounded,
+                      color: Colors.blueGrey,
+                    ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     filled: true,
                     fillColor: Colors.white,
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      roomType = value;
-                    });
+                  dropdownColor: Colors.white,
+                ),
+
+                const SizedBox(height: 10),
+
+                DropdownButtonFormField(
+                  items: sc.listaFinalServicio!.map((e) {
+                    return DropdownMenuItem(
+                      value: e
+                          .nombre, // Supongo que "nombre" es el campo que deseas mostrar
+                      //child: Text(e.nombre),
+                      child: Text("${e.nombre} - ${e.costo}"),
+                    );
+                  }).toList(),
+                  onChanged: (dynamic value) {
+                    selectedServices = value as String;
+
+                    setState(() {});
                   },
+                  isDense: true,
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                    labelText: "Servicios",
+                    prefixIcon: Icon(
+                      Icons.alarm_add,
+                      color: Colors.blueGrey,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  dropdownColor: Colors.white,
                 ),
                 const SizedBox(height: 10),
                 // Campo de número de personas
@@ -89,7 +153,10 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                 TextField(
                   controller: dateOfInput,
                   decoration: InputDecoration(
-                    icon: const Icon(Icons.calendar_today_rounded),
+                    prefixIcon: const Icon(
+                      Icons.calendar_today_rounded,
+                      color: Colors.blueGrey,
+                    ),
                     labelText: "Fecha de Entrada",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -117,7 +184,10 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                 const SizedBox(height: 20),
                 TextField(
                   decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today_rounded),
+                    prefixIcon: const Icon(
+                      Icons.calendar_today_rounded,
+                      color: Colors.blueGrey,
+                    ),
                     labelText: "Fecha de Salida",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -148,8 +218,9 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                 ElevatedButton(
                   onPressed: () {
                     // Aquí puedes manejar la información del formulario, por ejemplo, enviarla a una base de datos.
-                    print("Número de Habitación: $reserveDate");
-                    print("Tipo de Habitación: $roomType");
+
+                    print("Habitación seleccionada: ${selectedRoom}");
+                    print("Servicios: ${selectedServices}");
                     print("Precio por Noche: $reserveNumberOfRooms");
                     print("Número de Personas: $numberOfPeople");
                   },
