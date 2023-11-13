@@ -2,7 +2,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_bella_vista/domain/controller/user_services.dart';
+import 'package:hotel_bella_vista/domain/controller/controluser.dart';
+import 'package:hotel_bella_vista/ui/pages/habitacion/listahabitacionesgenerales.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/room_card.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
@@ -10,6 +11,7 @@ import 'package:hotel_bella_vista/ui/pages/home/homeScreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:hotel_bella_vista/ui/pages/perfil/listarusuarios.dart';
 import 'package:hotel_bella_vista/ui/pages/perfil/mostrarperfil.dart';
+import 'package:hotel_bella_vista/ui/pages/servicios/listadoserviciosgenerales.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/listarServicios.dart';
 
 class HomeView extends StatefulWidget {
@@ -21,7 +23,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final UserController sc = Get.find();
+  final ControlUserAuth sc = Get.find();
   int _selectedIndex = 0;
   static List<Widget> _sectionWidgets = [
     const HomeScreen(),
@@ -36,9 +38,19 @@ class _HomeViewState extends State<HomeView> {
       screen: const ListarHabitaciones(),
     ),
     DrawerItem(
+      icon: const Icon(Icons.home),
+      title: const Text('Habitaciones Generales'),
+      screen: const ListaHabitaciones(),
+    ),
+    DrawerItem(
       icon: const Icon(Icons.room_service_outlined),
       title: const Text('Servicios'),
       screen: const ListarServicios(),
+    ),
+    DrawerItem(
+      icon: const Icon(Icons.room_service_outlined),
+      title: const Text('Servicios Generales'),
+      screen: const ListadoServicios(),
     ),
     DrawerItem(
       icon: const Icon(Icons.supervised_user_circle),
@@ -75,8 +87,8 @@ class _HomeViewState extends State<HomeView> {
             padding: const EdgeInsets.only(bottom: 5, right: 5),
             child: FloatingActionButton(
               onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.popAndPushNamed(context, '/login');
+                sc.cerrarSesion();
+                Get.offAllNamed('/login');
               },
               child: const Icon(Icons.login_outlined),
             ),

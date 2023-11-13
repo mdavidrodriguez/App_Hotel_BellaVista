@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
 import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
+import 'package:hotel_bella_vista/domain/controller/controluser.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/social.login.dart';
@@ -16,7 +17,6 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
 
   final TextEditingController emailController = TextEditingController();
 
@@ -49,6 +49,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    ControlUserAuth cua = Get.find();
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -119,7 +120,35 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   ButtonGlobal(onTap: () {
                     if (_formkey.currentState!.validate()) {
-                      sigIn();
+                      cua.ingresarUser(
+                          emailController.text, passwordController.text).then((value) {
+                      if (cua.userValido == null) {
+                        Get.snackbar(
+                          'Error',
+                          'Email o clave incorrecta',
+                          snackPosition: SnackPosition.TOP,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                          borderRadius: 10,
+                          margin: const EdgeInsets.all(10),
+                          duration: const Duration(seconds: 3),
+                          isDismissible: true,
+                          dismissDirection: DismissDirection.vertical,
+                          forwardAnimationCurve: Curves.easeOutBack,
+                          reverseAnimationCurve: Curves.easeInBack,
+                        );
+                      } else {
+                        // final ControlUserAuth cua = Get.find();
+                        // // final HabitacionController hc = Get.find();
+                        
+                        // if (cua.rol == 'Admin') {
+                        //   // hc.consultarHabitaciones(cua.userValido?.user?.uid);
+                        // } else {
+                        //   // hc.consultarHabitacionesgenerales();
+                        // }
+                        Get.offAllNamed('/home');
+                      }
+                    });
                     }
                   }),
                   const SizedBox(
@@ -141,22 +170,22 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  void sigIn() async {
-    String email = emailController.text;
-    String password = passwordController.text;
+  // void sigIn() async {
+  //   String email = emailController.text;
+  //   String password = passwordController.text;
 
-    User? user = await _auth.singInWithAndPassword(email, password);
+  //   User? user = await _auth.singInWithAndPassword(email, password);
 
-    if (user != null) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, "/home");
-      print("User is signip");
-      emailController.clear();
-      passwordController.clear();
-    } else {
-      print('Some error');
-    }
-  }
+  //   if (user != null) {
+  //     // ignore: use_build_context_synchronously
+  //     Navigator.pushNamed(context, "/home");
+  //     print("User is signip");
+  //     emailController.clear();
+  //     passwordController.clear();
+  //   } else {
+  //     print('Some error');
+  //   }
+  // }
 }
 
 class BotonNavigation extends StatelessWidget {

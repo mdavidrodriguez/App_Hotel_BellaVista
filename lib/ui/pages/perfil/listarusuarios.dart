@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hotel_bella_vista/domain/controller/user_services.dart';
+import 'package:hotel_bella_vista/domain/controller/controluser.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/inputs_campos.dart';
 
 class ListarUsuarios extends StatelessWidget {
@@ -9,7 +9,7 @@ class ListarUsuarios extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    UserController uc = Get.find();
+    ControlUserAuth uc = Get.find();
     uc.consultarUsuarios();
     return Scaffold(
         appBar: AppBar(

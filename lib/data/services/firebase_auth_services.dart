@@ -17,6 +17,7 @@ class FirebaseAuthService {
           apellido: '',
           telefono: '',
           email: email,
+          imagenes: '',
           role: '');
 
       return usuario;
@@ -86,30 +87,29 @@ class FirebaseAuthService {
     return null;
   }
 
+  Future<String?> getUserRoleFromFirestore(String userId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference userDocRef =
+        firestore.collection('users').doc(userId);
 
-Future<String?> getUserRoleFromFirestore(String userId) async {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final DocumentReference userDocRef = firestore.collection('users').doc(userId);
-
-  try {
-    final DocumentSnapshot userDoc = await userDocRef.get();
-    if (userDoc.exists) {
-      final userData = userDoc.data() as Map<String, dynamic>;
-      final String? userRole = userData['role'];
-      return userRole;
-    } else {
-      return null; 
+    try {
+      final DocumentSnapshot userDoc = await userDocRef.get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        final String? userRole = userData['role'];
+        return userRole;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error al obtener el rol del usuario desde Firestore: $e');
+      return null;
     }
-  } catch (e) {
-    print('Error al obtener el rol del usuario desde Firestore: $e');
-    return null;
   }
-}
 
   Future<User?> getCurrentUser() {
     return auth.authStateChanges().first;
   }
-
 
   static Future<void> storeUserDataInFirestore({
     required String userId,
@@ -118,6 +118,7 @@ Future<String?> getUserRoleFromFirestore(String userId) async {
     required String apellido,
     required String telefono,
     required String email,
+    required String imagenes,
     required String role,
   }) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -125,11 +126,13 @@ Future<String?> getUserRoleFromFirestore(String userId) async {
 
     try {
       await userCollection.doc(userId).set({
+        'id': userId,
         'identificacion': identificacion,
         'nombre': nombre,
         'apellido': apellido,
         'telefono': telefono,
         'email': email,
+        'imagenes': imagenes,
         'role': role
       });
     } catch (e) {

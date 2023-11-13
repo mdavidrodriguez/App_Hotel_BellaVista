@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/user_services.dart';
-import 'package:hotel_bella_vista/domain/controller/user_services.dart';
+import 'package:hotel_bella_vista/domain/controller/controluser.dart';
+import 'package:hotel_bella_vista/ui/pages/perfil/editarPerfil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class Userscreen extends StatefulWidget {
-  const Userscreen({super.key});
+  const Userscreen({Key? key}) : super(key: key);
 
   @override
   UserscreenState createState() => UserscreenState();
 }
 
 class UserscreenState extends State<Userscreen> {
-  final UserController sc = Get.find();
+  final ControlUserAuth sc = Get.find();
   final ImagePicker _imagePicker = ImagePicker();
   ImageProvider? _image;
   File? _newImageFile;
   final UserService _imageUploadService = UserService();
 
-  Future<void> _getImage() async {
-    final pickedFile =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
+  Future<void> _getImage(ImageSource source) async {
+    final pickedFile = await _imagePicker.pickImage(source: source);
 
     if (pickedFile != null) {
       setState(() {
@@ -34,13 +34,16 @@ class UserscreenState extends State<Userscreen> {
   Future<void> _saveImage() async {
     if (_newImageFile != null) {
       final imageUrl = await _imageUploadService.uploadUserCover(
-          _newImageFile!.path, sc.listafinal![0].id);
+        _newImageFile!.path,
+        sc.listafinal![0].id,
+      );
       if (imageUrl != null) {
         _imageUploadService.updateCoverUser(sc.listafinal![0].id, imageUrl);
 
         setState(() {
           _newImageFile = null;
           _image = NetworkImage(imageUrl);
+          sc.consultarServicio();
         });
       }
     }
@@ -55,6 +58,19 @@ class UserscreenState extends State<Userscreen> {
         title: const Text(
           'Mi Perfil',
           style: TextStyle(color: Colors.white),
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.only(bottom: 5, left: 6),
+          child: FloatingActionButton(
+            child: Icon(
+              Icons.arrow_back_outlined,
+              color: colors.primary,
+              size: 30,
+            ),
+            onPressed: () {
+              Get.offAllNamed('/home');
+            },
+          ),
         ),
         centerTitle: true,
         backgroundColor: colors.primary,
@@ -76,7 +92,36 @@ class UserscreenState extends State<Userscreen> {
                   children: [
                     Center(
                       child: GestureDetector(
-                        onTap: _getImage,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SafeArea(
+                                child: Wrap(
+                                  children: [
+                                    ListTile(
+                                      leading: const Icon(Icons.photo_library),
+                                      title: const Text(
+                                          'Seleccionar de la galería'),
+                                      onTap: () {
+                                        _getImage(ImageSource.gallery);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt),
+                                      title: const Text('Tomar una foto'),
+                                      onTap: () {
+                                        _getImage(ImageSource.camera);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
                         child: Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: CircleAvatar(
@@ -128,9 +173,24 @@ class UserscreenState extends State<Userscreen> {
           );
         }
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _saveImage,
-        child: const Icon(Icons.save),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Perfil()));
+            },
+            heroTag: 'editbutton',
+            child: const Icon(Icons
+                .edit_note_outlined), // Etiqueta única para el segundo botón
+          ),
+          FloatingActionButton(
+            onPressed: _saveImage,
+            heroTag: 'saveButton', // Etiqueta única para el primer botón
+            child: const Icon(Icons.save),
+          ),
+        ],
       ),
     );
   }

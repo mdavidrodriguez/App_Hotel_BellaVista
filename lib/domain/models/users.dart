@@ -26,7 +26,22 @@ class UserData {
         apellido: map['apellido'] ?? '',
         telefono: map['telefono'] ?? '',
         email: map['email'] ?? '',
-        imagen: map['imagenes'] ?? '',
+        imagen: map['imagenes'] ??
+            'https://firebasestorage.googleapis.com/v0/b/hotelbellavista-e9e72.appspot.com/o/servicios%2Foik8H8MQzNbGV7dkPezjpnwi3AC2.png?alt=media&token=6e1ffe0b-be3d-4fd8-9c87-52297d09d4a4',
         role: map['role'] ?? '');
   }
 }
+
+// Datos de ejemplo
+String id = '2';
+Map<String, dynamic> datosAdmin = {
+  'identificacion': '987654321',
+  'nombre': 'Admin',
+  'apellido': 'User',
+  'telefono': '555-4321',
+  'email': 'admin@example.com',
+  'imagen': 'admin_avatar.jpg',
+  'role': 'admin'
+};
+
+UserData adminUser = UserData.fromMap(id, datosAdmin);

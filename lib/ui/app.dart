@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
-import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 import 'package:hotel_bella_vista/data/state/state.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
@@ -15,7 +14,9 @@ import 'package:hotel_bella_vista/ui/pages/Reservation/reservartion_screen.dart'
 import 'package:hotel_bella_vista/ui/pages/habitacion/addhabitacion_screen.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
+import 'package:hotel_bella_vista/ui/pages/perfil/editarPerfil.dart';
 import 'package:hotel_bella_vista/ui/pages/perfil/listarusuarios.dart';
+import 'package:hotel_bella_vista/ui/pages/perfil/mostrarperfil.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/addservicio.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/listarservicios.dart';
 
@@ -47,40 +48,9 @@ class MyApp extends StatelessWidget {
           '/editarservicio': (context) => const EditServicioScreen(),
           '/listarservicios': (context) => const ListarServicios(),
           '/listarUsuarios': (context) => const ListarUsuarios(),
+          '/perfil': (context) => const Userscreen(),
+          '/editarperfil': (context) => const Perfil(),
         },
-//         onGenerateRoute: (settings) {
-//   return MaterialPageRoute<dynamic>(
-//     builder: (context) {
-//       if (settings.name == '/panel') {
-//         // Obtén el rol del usuario desde Firestore
-//         FirebaseAuthService.getUserRoleFromFirestore().then((userRole) {
-//           if (userRole == 'admin') {
-//             Navigator.push(context, MaterialPageRoute(builder: (context) => const PanelView()));
-//           } else {
-//             Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeView(title: 'Bella vista')));
-//           }
-//         });
-
-//         return Container(); // Devuelve un widget temporal mientras se resuelve la lógica asincrónica.
-//       } else if (settings.name == '/reservation/register') {
-//         // Obtén el rol del usuario desde Firestore
-//         FirebaseAuthService.getUserRoleFromFirestore().then((userRole) {
-//           if (userRole == 'admin') {
-//             Navigator.push(context, MaterialPageRoute(builder: (context) => const ReservasRegister()));
-//           } else {
-//             Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeView(title: 'Bella vista')));
-//           }
-//         });
-
-//         return Container(); // Devuelve un widget temporal mientras se resuelve la lógica asincrónica.
-//       }
-
-//       // Otras rutas personalizadas según el rol del usuario
-
-//       return Container(); // Devuelve un widget temporal mientras se resuelve la lógica asincrónica.
-//     },
-//   );
-// },
       ),
     );
   }
