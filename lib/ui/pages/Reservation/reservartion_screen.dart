@@ -84,9 +84,9 @@ class ReservationGrid extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4.0),
                     color: Colors.green.withOpacity(0.5),
                   ),
-                  child: Text(
+                  child: const Text(
                     "",
-                    style: const TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -97,8 +97,8 @@ class ReservationGrid extends StatelessWidget {
   }
 
   void _navigateToReserva() {}
-
 }
+
 class Myhabitacion extends StatelessWidget {
   const Myhabitacion({super.key});
 
