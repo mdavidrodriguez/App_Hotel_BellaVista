@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
 import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditHabitacionScreen extends StatelessWidget {
   const EditHabitacionScreen({super.key});
@@ -221,27 +222,21 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
                           ),
                         ],
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          try {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
-                            if (result != null) {
-                              setState(() => image = result.files.single.path);
-                            }
-                          } catch (e) {
-                            e.printError();
-                          }
-                        },
-                        child: SizedBox(
-                          width: 150,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: image != null
-                                ? Image.file(File(image!))
-                                : Image.asset('assets/images/take_photo.jpg'),
-                          ),
+                      SizedBox(
+                        width: 150,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: image != null
+                              ? Image.file(File(image!))
+                              : Image.asset('assets/images/camara.jpeg'),
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          showImagePickerDialog(context);
+                        },
+                        child: const Text('Seleccionar Imagen'),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
@@ -266,6 +261,52 @@ class _EditHabitacionFormState extends State<EditHabitacionForm> {
           Navigator.pop(context);
         },
       ),
+    );
+  }
+
+  Future<void> showImagePickerDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Seleccionar Imagen"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.camera),
+                  title: const Text('Tomar foto'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final XFile? pickedFile = await ImagePicker().pickImage(
+                      source: ImageSource.camera,
+                    );
+                    if (pickedFile != null) {
+                      setState(() {
+                        image = pickedFile.path;
+                      });
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text('Seleccionar desde Galería'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      setState(() {
+                        image = result.files.single.path;
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -1,51 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
-import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
+import 'package:hotel_bella_vista/domain/controller/controlleruser.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.global.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/social.login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/text.form.global.dart';
-import 'package:hotel_bella_vista/ui/pages/home/home_view.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
-
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
+class LoginView extends StatelessWidget {
+  final ControlUserAuth _authController = Get.find();
 
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
 
-  var usuarior;
-  final _formkey = GlobalKey<FormState>();
-
-  void ingoogle() {
-    FirebaseAuthService().ingresarGoogle().then((user) {
-      setState(() {
-        print(user);
-        usuarior = user.user!.displayName;
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    const HomeView(title: 'Logueado')));
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +22,7 @@ class _LoginViewState extends State<LoginView> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Form(
-            key: _formkey,
+            key: _formKey,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15.0),
@@ -118,8 +87,8 @@ class _LoginViewState extends State<LoginView> {
                     height: 10,
                   ),
                   ButtonGlobal(onTap: () {
-                    if (_formkey.currentState!.validate()) {
-                      sigIn();
+                    if (_formKey.currentState!.validate()) {
+                      signIn();
                     }
                   }),
                   const SizedBox(
@@ -141,28 +110,61 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  void sigIn() async {
+  void signIn() async {
     String email = emailController.text;
     String password = passwordController.text;
 
-    User? user = await _auth.singInWithAndPassword(email, password);
+    await _authController.ingresarUser(email, password);
 
-    if (user != null) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, "/home");
-      print("User is signip");
+    if (_authController.estadoUser != null) {
+      // Obtener el rol del usuario desde Firestore
+      String userId = _authController.estadoUser!.user!.uid;
+      String? userRole = await _authController.obtenerRolUsuario(userId);
+
+      if (userRole != null) {
+        // Validar el rol y dirigir al usuario a la pantalla correspondiente
+        if (userRole == 'admin') {
+          Get.offAllNamed('/home');
+        } else {
+          Get.offAllNamed('/home_user');
+        }
+      } else {
+        // Si no se pudo obtener el rol, mostrar un mensaje de error
+        print('Error al obtener el rol del usuario.');
+        // Puedes mostrar un snackbar o un diálogo aquí
+      }
+
+      // Limpiar los controladores
       emailController.clear();
       passwordController.clear();
     } else {
-      print('Some error');
+      print('Credenciales incorrectas');
+      Get.snackbar(
+        'Error de Inicio de Sesión',
+        'Credenciales incorrectas',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  void ingoogle() async {
+    try {
+      UserCredential userCredential = await _authController.ingresarGoogle();
+      print(userCredential);
+      String usuarior = userCredential.user!.displayName ?? "";
+      Get.offAndToNamed('/home');
+    } catch (e) {
+      print("Error al iniciar sesión con Google: $e");
+      // Manejar el error, mostrar un mensaje, etc.
     }
   }
 }
 
 class BotonNavigation extends StatelessWidget {
   const BotonNavigation({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -177,8 +179,12 @@ class BotonNavigation extends StatelessWidget {
           InkWell(
             child: TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Register()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Register(),
+                  ),
+                );
               },
               child: Text(
                 ' Registrate',

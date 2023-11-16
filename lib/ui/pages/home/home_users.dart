@@ -3,30 +3,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/domain/controller/user_services.dart';
+import 'package:hotel_bella_vista/ui/pages/habitacion/listado_habitaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
-import 'package:hotel_bella_vista/ui/pages/panelPrincipal/room_card.dart';
-import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/registerForm_Reservation.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/room_car_users.dart';
 import 'package:hotel_bella_vista/ui/pages/home/homeScreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:hotel_bella_vista/ui/pages/perfil/listarusuarios.dart';
 import 'package:hotel_bella_vista/ui/pages/perfil/mostrarperfil.dart';
-import 'package:hotel_bella_vista/ui/pages/servicios/listarServicios.dart';
+import 'package:hotel_bella_vista/ui/pages/servicios/listado_servicios.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({Key? key, required this.title}) : super(key: key);
+class HomeViewUser extends StatefulWidget {
+  const HomeViewUser({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<HomeViewUser> createState() => _HomeViewUserState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewUserState extends State<HomeViewUser> {
   final UserController sc = Get.find();
   int _selectedIndex = 0;
   static List<Widget> _sectionWidgets = [
     const HomeScreen(),
     const HabitacionkshelfScreen(),
-    const CardsView(),
+    const CardsViewUser(),
   ];
 
   final List<DrawerItem> drawerItems = [
@@ -37,23 +37,18 @@ class _HomeViewState extends State<HomeView> {
     ),
     DrawerItem(
       icon: const Icon(Icons.home),
-      title: const Text('Gestionar Habitaciones'),
-      screen: const ListarHabitaciones(),
+      title: const Text('Listar Habitaciones'),
+      screen: const ListaHabitaciones(),
     ),
     DrawerItem(
       icon: const Icon(Icons.room_service_outlined),
-      title: const Text('Gestionar Servicios'),
-      screen: const ListarServicios(),
+      title: const Text('Listado Servicios'),
+      screen: const ListadoServicios(),
     ),
     DrawerItem(
-      icon: const Icon(Icons.room_service_outlined),
-      title: const Text('Reservaciones'),
-      screen: const HabitacionkshelfScreen(),
-    ),
-    DrawerItem(
-      icon: const Icon(Icons.supervisor_account_rounded),
-      title: const Text('Lista Usuarios'),
-      screen: const ListarUsuarios(),
+      icon: const Icon(Icons.supervised_user_circle),
+      title: const Text('Realizar reserva'),
+      screen: const ReservasScreen(),
     ),
   ];
 
@@ -70,7 +65,7 @@ class _HomeViewState extends State<HomeView> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: colors.primary,
         title: const Text(
-          'Hotel Bella vista',
+          'Vista User',
           style: TextStyle(color: Colors.white),
         ),
         elevation: 0,

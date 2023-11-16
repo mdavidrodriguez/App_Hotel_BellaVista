@@ -1,26 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:hotel_bella_vista/domain/controller/controlleruser.dart';
 
 import 'package:hotel_bella_vista/domain/models/reservation.dart';
 
 class ReservasService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final reserRef = FirebaseFirestore.instance.collection('reservas').withConverter(
-      fromFirestore: (snapshop, _) =>
-          ReservaHotel.desdeDoc(snapshop.id, snapshop.data()!),
-      toFirestore: (serv, _) => serv.toJson());
+  ControlUserAuth cua = Get.find();
+  final reserRef = FirebaseFirestore.instance
+      .collection('reservas')
+      .withConverter(
+          fromFirestore: (snapshop, _) =>
+              ReservaHotel.desdeDoc(snapshop.id, snapshop.data()!),
+          toFirestore: (serv, _) => serv.toJson());
 
   Future<String> saveReservas(
-      String numeroReserva,
-      String numeroHabitacion,
-      String servicioReserva,
-      String numeroPersonas,
-      String fechaCheckIn,
-      String fechaCheckOut,
-      double precioTotal,
-      ) async {
+    String numeroReserva,
+    String numeroHabitacion,
+    String servicioReserva,
+    String numeroPersonas,
+    String fechaCheckIn,
+    String fechaCheckOut,
+    double precioTotal,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    String uid = '';
+
+    if (user != null) {
+      // Si el usuario está autenticado con correo electrónico y contraseña
+      uid = user.uid;
+    } else {
+      // Si el usuario está autenticado con Google
+      uid = cua.userValido?.user?.uid ?? '';
+    }
     var reference = FirebaseFirestore.instance.collection("reservas");
     var result = await reference.add({
+      'user': uid,
       'numeroReserva': numeroReserva,
+      'numeroHabitacion': numeroHabitacion,
+      'numeroPersonas': numeroPersonas,
       'fechaCheckIn': fechaCheckIn,
       'fechaCheckOut': fechaCheckOut,
       'precioTotal': precioTotal,
@@ -47,6 +66,5 @@ class ReservasService {
 
   static Future<void> eliminarReservas(String id) async {
     await _db.collection('reservas').doc(id).delete().catchError((e) {});
-
   }
 }

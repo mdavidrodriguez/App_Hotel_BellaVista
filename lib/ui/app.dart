@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
-import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 import 'package:hotel_bella_vista/data/state/state.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/login.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/register.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/splash.view.dart';
+import 'package:hotel_bella_vista/ui/pages/habitacion/detalle_habitacion_screen.dart';
+import 'package:hotel_bella_vista/ui/pages/home/home_users.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/registerForm_Reservation.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/servicioCliente.dart';
@@ -35,7 +36,9 @@ class MyApp extends StatelessWidget {
         routes: {
           '/plashView': (context) => const SplashView(),
           '/home': (context) => const HomeView(title: 'Bella vista'),
-          '/login': (context) => const LoginView(),
+          '/home_user': (context) =>
+              const HomeViewUser(title: 'Bella vista User'),
+          '/login': (context) => LoginView(),
           '/register': (context) => const Register(),
           '/panel': (context) => const PanelView(),
           '/reservation/register': (context) => const ReservasScreen(),
@@ -47,6 +50,8 @@ class MyApp extends StatelessWidget {
           '/editarservicio': (context) => const EditServicioScreen(),
           '/listarservicios': (context) => const ListarServicios(),
           '/listarUsuarios': (context) => const ListarUsuarios(),
+         
+
         },
 //         onGenerateRoute: (settings) {
 //   return MaterialPageRoute<dynamic>(

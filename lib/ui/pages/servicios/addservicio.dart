@@ -5,6 +5,7 @@ import 'package:hotel_bella_vista/data/services/servicios_services.dart';
 import 'package:hotel_bella_vista/domain/controller/servicios_controller.dart';
 import 'package:hotel_bella_vista/domain/models/servicios.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/inputs_campos.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditServicioScreen extends StatelessWidget {
   const EditServicioScreen({super.key});
@@ -129,18 +130,57 @@ class _EditServicioFormState extends State<EditServicioForm> {
                       GestureDetector(
                         onTap: () async {
                           try {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
-                            if (result != null) {
-                              setState(() => image = result.files.single.path);
-                            }
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Seleccionar Imagen"),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading: const Icon(Icons.camera),
+                                          title: const Text('Tomar foto'),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            final XFile? pickedFile =
+                                                await ImagePicker().pickImage(
+                                                    source: ImageSource.camera);
+                                            if (pickedFile != null) {
+                                              setState(() =>
+                                                  image = pickedFile.path);
+                                            }
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: const Icon(Icons.image),
+                                          title: const Text(
+                                              'Seleccionar desde Galería'),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            FilePickerResult? result =
+                                                await FilePicker.platform
+                                                    .pickFiles();
+                                            if (result != null) {
+                                              setState(() => image =
+                                                  result.files.single.path);
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
                           } catch (e) {
                             e.printError();
                           }
                         },
                         child: ImageFile(
-                            image: image,
-                            imageAssets: 'assets/images/camara.jpeg'),
+                          image: image,
+                          imageAssets: 'assets/images/camara.jpeg',
+                        ),
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
@@ -165,6 +205,52 @@ class _EditServicioFormState extends State<EditServicioForm> {
           Navigator.pop(context);
         },
       ),
+    );
+  }
+
+  Future<void> showImagePickerDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Seleccionar Imagen"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.camera),
+                  title: const Text('Tomar foto'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final XFile? pickedFile = await ImagePicker().pickImage(
+                      source: ImageSource.camera,
+                    );
+                    if (pickedFile != null) {
+                      setState(() {
+                        image = pickedFile.path;
+                      });
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text('Seleccionar desde Galería'),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      setState(() {
+                        image = result.files.single.path;
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

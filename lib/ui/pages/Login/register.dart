@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hotel_bella_vista/config/theme/app_theme.dart';
 import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 import 'package:hotel_bella_vista/ui/pages/Login/widgets/button.globalRegister.dart';
@@ -216,40 +217,56 @@ class _RegisterState extends State<Register> {
   }
 
   void _signUp() async {
-    String identificacion = identificacionController.text;
-    String nombre = nombreController.text;
-    var tiporol = selectedRol;
-    String apellido = apellidoController.text;
-    String telefono = telefonoController.text;
-    String email = emailController.text;
-    String password = passwordController.text;
-    // String role = role
+  String identificacion = identificacionController.text;
+  String nombre = nombreController.text;
+  var tiporol = selectedRol;
+  String apellido = apellidoController.text;
+  String telefono = telefonoController.text;
+  String email = emailController.text;
+  String password = passwordController.text;
 
-    User? user = await _auth.signupWithEmailAndPassword(email, password);
+  User? user = await _auth.signupWithEmailAndPassword(email, password);
 
-    if (user != null) {
-      await FirebaseAuthService.storeUserDataInFirestore(
-          userId: user.uid,
-          identificacion: identificacion,
-          nombre: nombre,
-          apellido: apellido,
-          telefono: telefono,
-          email: email,
-          role: tiporol.toString());
+  if (user != null) {
+    await FirebaseAuthService.storeUserDataInFirestore(
+      userId: user.uid,
+      identificacion: identificacion,
+      nombre: nombre,
+      apellido: apellido,
+      telefono: telefono,
+      email: email,
+      role: tiporol.toString(),
+    );
 
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, "/home");
-      identificacionController.clear();
-      nombreController.clear();
-      apellidoController.clear();
-      telefonoController.clear();
-      emailController.clear();
-      passwordController.clear();
-      print("User is successfully created");
-    } else {
-      print('Some error');
-    }
+    // Muestra un snackbar indicando que el registro fue exitoso
+    Get.snackbar(
+      'Registro Exitoso',
+      '¡Bienvenido, $nombre!',
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+
+    // ignore: use_build_context_synchronously
+    Navigator.pushNamed(context, "/home");
+    identificacionController.clear();
+    nombreController.clear();
+    apellidoController.clear();
+    telefonoController.clear();
+    emailController.clear();
+    passwordController.clear();
+    print("User is successfully created");
+  } else {
+    Get.snackbar(
+      'Error de Registro',
+      'Hubo un error al crear la cuenta. Por favor, inténtalo nuevamente.',
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+
+    print('Some error');
   }
+}
+
 }
 
 class BotonNavigation extends StatelessWidget {

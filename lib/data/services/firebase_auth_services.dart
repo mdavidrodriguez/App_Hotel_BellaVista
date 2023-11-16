@@ -8,21 +8,24 @@ class FirebaseAuthService {
   static Future<dynamic> crearRegistroEmail(dynamic email, dynamic pass) async {
     try {
       UserCredential usuario = await auth.createUserWithEmailAndPassword(
-          email: email, password: pass);
+        email: email,
+        password: pass,
+      );
 
       await storeUserDataInFirestore(
-          userId: usuario.user!.uid,
-          identificacion: '',
-          nombre: '',
-          apellido: '',
-          telefono: '',
-          email: email,
-          role: '');
+        userId: usuario.user!.uid,
+        identificacion: '',
+        nombre: '',
+        apellido: '',
+        telefono: '',
+        email: email,
+        role: '',
+      );
 
       return usuario;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('Contraseña Debil');
+        print('Contraseña Débil');
         return '1';
       } else if (e.code == 'email-already-in-use') {
         print('Correo ya Existe');
@@ -66,7 +69,9 @@ class FirebaseAuthService {
   Future<User?> singInWithAndPassword(String email, String password) async {
     try {
       UserCredential credential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       return credential.user;
     } catch (e) {
       print("some error");
@@ -75,10 +80,14 @@ class FirebaseAuthService {
   }
 
   Future<User?> signupWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
       UserCredential credential = await auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       return credential.user;
     } catch (e) {
       print("some error");
@@ -86,30 +95,29 @@ class FirebaseAuthService {
     return null;
   }
 
+  Future<String?> getUserRoleFromFirestore(String userId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference userDocRef =
+        firestore.collection('users').doc(userId);
 
-Future<String?> getUserRoleFromFirestore(String userId) async {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final DocumentReference userDocRef = firestore.collection('users').doc(userId);
-
-  try {
-    final DocumentSnapshot userDoc = await userDocRef.get();
-    if (userDoc.exists) {
-      final userData = userDoc.data() as Map<String, dynamic>;
-      final String? userRole = userData['role'];
-      return userRole;
-    } else {
-      return null; 
+    try {
+      final DocumentSnapshot userDoc = await userDocRef.get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        final String? userRole = userData['role'];
+        return userRole;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error al obtener el rol del usuario desde Firestore: $e');
+      return null;
     }
-  } catch (e) {
-    print('Error al obtener el rol del usuario desde Firestore: $e');
-    return null;
   }
-}
 
   Future<User?> getCurrentUser() {
     return auth.authStateChanges().first;
   }
-
 
   static Future<void> storeUserDataInFirestore({
     required String userId,
@@ -130,10 +138,40 @@ Future<String?> getUserRoleFromFirestore(String userId) async {
         'apellido': apellido,
         'telefono': telefono,
         'email': email,
-        'role': role
+        'role': role,
+        'uid': userId,
       });
     } catch (e) {
       print("Error storing user data in Firestore: $e");
     }
+
+
+    Future<String?> getUserRoleFromFirestore(String userId) async {
+  try {
+    // Obtener la referencia del documento de usuario desde Firestore
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get();
+
+    if (userDoc.exists) {
+      // Obtener los datos del usuario
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+      // Obtener y devolver el rol del usuario
+      String? userRole = userData['role'];
+      return userRole;
+    } else {
+      // Devolver null si el documento de usuario no existe
+      return null;
+    }
+  } catch (e) {
+    print('Error al obtener el rol del usuario desde Firestore: $e');
+    return null;
   }
+}
+
+  }
+
+  
 }

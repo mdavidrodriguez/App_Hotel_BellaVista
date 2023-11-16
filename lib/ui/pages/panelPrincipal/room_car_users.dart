@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_bella_vista/ui/pages/habitacion/listado_habitaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/contacto.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservacionesUser.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservation_card.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/servicios_card.dart';
+import 'package:hotel_bella_vista/ui/pages/servicios/listado_servicios.dart';
 
-class CardsView extends StatelessWidget {
-  const CardsView({super.key});
+class CardsViewUser extends StatelessWidget {
+  const CardsViewUser({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +28,36 @@ class CardsView extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
+          const ReservationCard(),
+          TextEncabezados(
+              texto: Text(
+            "RESERVAR",
+            style: TextStyle(
+                color: Colors.white,
+                backgroundColor: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700),
+          )),
+          const SizedBox(
+            height: 10,
+          ),
           const ReservacionesUser(),
           TextEncabezados(
               texto: Text(
             "RESERVACIONES",
+            style: TextStyle(
+                color: Colors.white,
+                backgroundColor: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700),
+          )),
+          const SizedBox(
+            height: 10,
+          ),
+          const ServiciosListaCard(),
+          TextEncabezados(
+              texto: Text(
+            "SERVICIOS",
             style: TextStyle(
                 color: Colors.white,
                 backgroundColor: colors.primary,
@@ -63,7 +92,8 @@ class RoomCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/editarhabitacion');
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ListaHabitaciones()));
       },
       onHover: (value) => const Text("Habitaciones"),
       child: Center(

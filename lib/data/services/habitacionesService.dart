@@ -95,18 +95,15 @@ class HabitacionesService {
     }
     return lista;
   }
-  static Future<void> actualizarHabitacion(String id, Map<String, dynamic> datos) async {
-    await _db
-        .collection('habitaciones')
-        .doc(id)
-        .update(datos)
-        .catchError((e) {
-          print('Error al actualizar habitación: $e');
-        });
-  }
-    static Future<void> eliminarHabitacion(String id) async {
-    await _db.collection('habitaciones').doc(id).delete().catchError((e) {});
+
+  static Future<void> actualizarHabitacion(
+      String id, Map<String, dynamic> datos) async {
+    await _db.collection('habitaciones').doc(id).update(datos).catchError((e) {
+      print('Error al actualizar habitación: $e');
+    });
   }
 
- 
+  static Future<void> eliminarHabitacion(String id) async {
+    await _db.collection('habitaciones').doc(id).delete().catchError((e) {});
+  }
 }
