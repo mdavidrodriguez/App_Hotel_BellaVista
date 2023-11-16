@@ -8,6 +8,9 @@ import 'package:hotel_bella_vista/domain/models/reservation.dart';
 class ReservasService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
   ControlUserAuth cua = Get.find();
+
+  final CollectionReference reservasCollection =
+      FirebaseFirestore.instance.collection('reservas');
   final reserRef = FirebaseFirestore.instance
       .collection('reservas')
       .withConverter(
@@ -48,6 +51,41 @@ class ReservasService {
     return Future.value(result.id);
   }
 
+
+  Future<List<ReservaHotel>> getReservasByFecha(
+      String fechaIngreso, String fechaSalida) async {
+    try {
+      QuerySnapshot querySnapshot = await reservasCollection
+          .where('fechaCheckIn', isGreaterThanOrEqualTo: fechaIngreso)
+          .where('fechaCheckOut', isLessThanOrEqualTo: fechaSalida)
+          .get();
+
+      List<ReservaHotel> reservas = querySnapshot.docs
+          .map((doc) => ReservaHotel.desdeDoc(doc.id, doc.data() as Map<String, dynamic>))
+          .toList();
+
+      return reservas;
+    } catch (e) {
+      print('Error al obtener reservas por fecha: $e');
+      return [];
+    }
+  }
+
+  Future<void> updateHabitacionDisponibilidad(
+      String numeroHabitacion, bool nuevaDisponibilidad) async {
+    try {
+      DocumentReference habitacionRef =
+          _db.collection('habitaciones').doc(numeroHabitacion);
+
+      await habitacionRef.update({
+        'estaDisponible': nuevaDisponibilidad,
+      });
+    } catch (e) {
+      print("Error al actualizar la disponibilidad de la habitación: $e");
+      rethrow;
+    }
+  }
+  
   static Future<List<ReservaHotel>> listarReservas() async {
     QuerySnapshot querySnapshot = await _db.collection("reservas").get();
     List<ReservaHotel> lista = [];

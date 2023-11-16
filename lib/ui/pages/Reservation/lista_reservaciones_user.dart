@@ -6,18 +6,19 @@ import 'package:hotel_bella_vista/domain/models/reservation.dart';
 import 'package:hotel_bella_vista/ui/pages/Reservation/reservaDetailScreen.dart';
 
 // ignore: must_be_immutable
-class ListaReservaciones extends StatelessWidget {
+class ListaReservacionesUser extends StatelessWidget {
   final ConsultasReservasController uc = Get.find();
-
-  ListaReservaciones({Key? key}) : super(key: key);
   ControlUserAuth cua = Get.find();
+
+  ListaReservacionesUser({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     uc.consultarServicio();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de Reservas'),
+        title: const Text('Reservaciones'),
         centerTitle: true,
       ),
       body: Obx(() {
@@ -25,10 +26,15 @@ class ListaReservaciones extends StatelessWidget {
         if (uc.listaFinalReserva?.isEmpty == true) {
           return const Center(child: CircularProgressIndicator());
         } else {
+          // Filtrar reservas por uid
+          final userUid = cua.userValido?.user?.uid;
+          final userReservas =
+              reservas?.where((reserva) => reserva.uid == userUid).toList();
+
           return ListView.builder(
-            itemCount: reservas?.length ?? 0,
+            itemCount: userReservas?.length ?? 0,
             itemBuilder: (context, index) {
-              final reserva = reservas![index];
+              final reserva = userReservas![index];
               return SingleChildScrollView(
                 child: Card(
                   margin: const EdgeInsets.all(2.0),

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/reservas_service.dart';
 import 'package:hotel_bella_vista/domain/controller/controlleruser.dart';
 import 'package:hotel_bella_vista/domain/controller/habitaciones_controller.dart';
+import 'package:hotel_bella_vista/domain/controller/reservas_controller.dart';
 import 'package:hotel_bella_vista/domain/controller/servicios_controller.dart';
 import 'package:hotel_bella_vista/domain/models/reservation.dart';
 
@@ -343,15 +344,35 @@ class _ReservasRegisterState extends State<ReservasRegister> {
     );
   }
 
-  ControlUserAuth cua = Get.find();
   void saveReserva(BuildContext context) async {
     var numeroReserva = reserveNumber.text;
-    var numeroHabitacionReserva = selectedRoom;
+    var numeroHabitacionReserva = selectedRoom.toString();
     var numeroPersonasReserva = numberOfPeople.text;
     var servicios = selectedServices.toString();
     var fechaIngreso = dateOfInput.text;
     var fechaSalida = dateOfOutput.text;
     var totalAPagar = double.parse(total.text);
+
+    // Verificar si la habitación está disponible
+    ConsultasHabitacionController uc = Get.find();
+    ConsultasReservasController crc = Get.find();
+    bool isHabitacionDisponible = uc.listaFinalHabitaciones!
+        .firstWhere((element) => element.numeroHabitacion == selectedRoom)
+        .estaDisponible;
+
+    if (!isHabitacionDisponible) {
+      print("Error: La habitación seleccionada no está disponible.");
+      return;
+    }
+
+    bool isDateAvailable = await isFechaDisponible(fechaIngreso, fechaSalida);
+
+    if (!isDateAvailable) {
+      print("Error: La fecha seleccionada ya está reservada por otro usuario.");
+      return;
+    }
+
+    crc.cambiarDisponibilidadHabitacion(numeroHabitacionReserva, false);
 
     if (widget.reserva == null) {
       String newReservaId = await ReservasService().saveReservas(
@@ -365,6 +386,17 @@ class _ReservasRegisterState extends State<ReservasRegister> {
       );
       print(newReservaId);
     }
-    Get.offNamed('/home');
+    Get.offNamed('/home_user');
+  }
+
+  Future<bool> isFechaDisponible(
+      String fechaIngreso, String fechaSalida) async {
+    List<ReservaHotel> reservas = await ReservasService().getReservasByFecha(
+      fechaIngreso,
+      fechaSalida,
+    );
+
+    // Si la lista de reservas es vacía, la fecha está disponible
+    return reservas.isEmpty;
   }
 }

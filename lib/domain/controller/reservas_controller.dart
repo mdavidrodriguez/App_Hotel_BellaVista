@@ -19,5 +19,15 @@ class ConsultasReservasController extends GetxController {
     _servicioFirestore.value?.removeWhere((reserva) => reserva.id == id);
   }
 
+  Future<void> cambiarDisponibilidadHabitacion(
+    String numeroHabitacion, bool nuevaDisponibilidad) async {
+  try {
+    await ReservasService()
+        .updateHabitacionDisponibilidad(numeroHabitacion, nuevaDisponibilidad);
+  } catch (e) {
+    print("Error al cambiar la disponibilidad de la habitación: $e");
+  }
+}
+
   List<ReservaHotel>? get listaFinalReserva => _servicioFirestore.value;
 }

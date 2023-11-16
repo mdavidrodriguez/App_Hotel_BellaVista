@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/domain/controller/user_services.dart';
+import 'package:hotel_bella_vista/ui/pages/Reservation/lista_reservaciones_user.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listado_habitaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/registerForm_Reservation.dart';
@@ -49,6 +50,11 @@ class _HomeViewUserState extends State<HomeViewUser> {
       icon: const Icon(Icons.house_outlined),
       title: const Text('Realizar reserva'),
       screen: const ReservasScreen(),
+    ),
+    DrawerItem(
+      icon: const Icon(Icons.house_outlined),
+      title: const Text('Reservaciones'),
+      screen: ListaReservacionesUser(),
     ),
     DrawerItem(
       icon: const Icon(Icons.favorite_outline_outlined),
@@ -105,14 +111,20 @@ class _HomeViewUserState extends State<HomeViewUser> {
                         height: 100,
                         child: CircleAvatar(
                           child: ClipOval(
-                            child: Image.network(
-                              isGoogleSignIn
-                                  ? FirebaseAuth.instance.currentUser!.photoURL!
-                                  : sc.listafinal![index].imagen,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
+                            child: isGoogleSignIn
+                                ? Image.network(
+                                    FirebaseAuth
+                                        .instance.currentUser!.photoURL!,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/camara.jpeg', // ajusta la ruta del asset según tu estructura de carpetas
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                       ),

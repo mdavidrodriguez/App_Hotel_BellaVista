@@ -49,7 +49,7 @@ class _HomeViewState extends State<HomeView> {
     DrawerItem(
       icon: const Icon(Icons.room_service_outlined),
       title: const Text('Reservaciones'),
-      screen:  ListaReservaciones(),
+      screen: ListaReservaciones(),
     ),
     DrawerItem(
       icon: const Icon(Icons.supervisor_account_rounded),
@@ -106,14 +106,20 @@ class _HomeViewState extends State<HomeView> {
                         height: 100,
                         child: CircleAvatar(
                           child: ClipOval(
-                            child: Image.network(
-                              isGoogleSignIn
-                                  ? FirebaseAuth.instance.currentUser!.photoURL!
-                                  : sc.listafinal![index].imagen,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
+                            child: isGoogleSignIn
+                                ? Image.network(
+                                    FirebaseAuth
+                                        .instance.currentUser!.photoURL!,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/images/camara.jpeg', // ajusta la ruta del asset según tu estructura de carpetas
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                       ),
