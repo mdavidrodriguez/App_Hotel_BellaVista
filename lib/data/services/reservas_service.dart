@@ -39,6 +39,7 @@ class ReservasService {
       'user': uid,
       'numeroReserva': numeroReserva,
       'numeroHabitacion': numeroHabitacion,
+      'servicios': servicioReserva,
       'numeroPersonas': numeroPersonas,
       'fechaCheckIn': fechaCheckIn,
       'fechaCheckOut': fechaCheckOut,

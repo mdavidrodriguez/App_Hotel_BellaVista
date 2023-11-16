@@ -37,7 +37,7 @@ class ReservasRegister extends StatefulWidget {
 class _ReservasRegisterState extends State<ReservasRegister> {
   TextEditingController reserveNumber = TextEditingController();
   TextEditingController numberOfPeople = TextEditingController();
-  List<String> selectedServices = [];
+  String selectedServices = "";
   String selectedRoom = "";
   TextEditingController dateOfInput = TextEditingController();
   TextEditingController dateOfOutput = TextEditingController();
@@ -47,14 +47,16 @@ class _ReservasRegisterState extends State<ReservasRegister> {
   double costoServicio = 0.0;
 
   double calcularTotal() {
+    // Sumar el precio de la habitación seleccionada
     double totalPagar = 0.0;
 
     if (selectedRoom.isNotEmpty) {
       totalPagar += costoHabitacion;
     }
 
+    // Sumar el precio del servicio seleccionado
     if (selectedServices.isNotEmpty) {
-      totalPagar += costoServicio * selectedServices.length;
+      totalPagar += costoServicio;
     }
 
     return totalPagar;
@@ -67,6 +69,9 @@ class _ReservasRegisterState extends State<ReservasRegister> {
     });
   }
 
+  // final _formKey = GlobalKey<FormState>();
+  // bool _saving_habitacion = false;
+
   @override
   void initState() {
     super.initState();
@@ -77,11 +82,12 @@ class _ReservasRegisterState extends State<ReservasRegister> {
   @override
   Widget build(BuildContext context) {
     ConsultasServiciosController sc = Get.find();
-    ControlUserAuth cua = Get.find();
     sc.consultarServicio();
 
     ConsultasHabitacionController uc = Get.find();
     uc.consultarHabitaciones();
+
+    print(sc.listaFinalServicio);
 
     return Scaffold(
       body: Stack(
@@ -94,202 +100,236 @@ class _ReservasRegisterState extends State<ReservasRegister> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: reserveNumber,
-                  decoration: InputDecoration(
-                    labelText: "Numero de reserva",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Campo de número de habitación
+                  TextField(
+                    controller: reserveNumber,
+                    decoration: InputDecoration(
+                      labelText: "Numero de reserva",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
+                    readOnly: true,
+                    // onChanged: (value) {
+                    //   setState(() {
+                    //     reserveNumber.text = Random().nextInt(100000).toString();
+                    //   });
+                    // },
                   ),
-                  readOnly: true,
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField(
-                  items: uc.listaFinalHabitaciones!.map((e) {
-                    return DropdownMenuItem(
-                      value: e.numeroHabitacion,
-                      child: Text(
-                          "${e.numeroHabitacion} ${e.tipoHabitacion} - ${e.precioPorNoche}"),
-                    );
-                  }).toList(),
-                  onChanged: (dynamic value) {
-                    selectedRoom = value as String;
-                    setState(() {
-                      costoHabitacion = uc.listaFinalHabitaciones!
-                          .firstWhere((element) =>
-                              element.numeroHabitacion == selectedRoom)
-                          .precioPorNoche;
-                      actualizarTotal();
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: "Habitaciones",
-                    prefixIcon: Icon(
-                      Icons.room_preferences_rounded,
-                      color: Colors.blueGrey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  dropdownColor: Colors.white,
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField(
-                  items: sc.listaFinalServicio!.map((e) {
-                    return DropdownMenuItem(
-                      value: e.nombre,
-                      child: Text("${e.nombre} - ${e.costo}"),
-                    );
-                  }).toList(),
-                  onChanged: (dynamic value) {
-                    setState(() {
-                      selectedServices.add(value as String);
-                      costoServicio = sc.listaFinalServicio!
-                          .firstWhere((element) =>
-                              element.nombre == selectedServices.last)
-                          .costo;
-                      actualizarTotal();
-                    });
-                  },
-                  isDense: true,
-                  isExpanded: true,
-                  decoration: const InputDecoration(
-                    labelText: "Servicios",
-                    prefixIcon: Icon(
-                      Icons.alarm_add,
-                      color: Colors.blueGrey,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  dropdownColor: Colors.white,
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Personas",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      numberOfPeople.text = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: dateOfInput,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.calendar_today_rounded,
-                      color: Colors.blueGrey,
-                    ),
-                    labelText: "Fecha de Entrada",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedTime = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101),
-                    );
-                    if (pickedTime != null) {
+                  const SizedBox(height: 10),
+
+                  DropdownButtonFormField(
+                    items: uc.listaFinalHabitaciones!.map((e) {
+                      return DropdownMenuItem(
+                        value: e
+                            .numeroHabitacion, // Supongo que "nombre" es el campo que deseas mostrar
+                        //child: Text(e.nombre),
+                        child: Text(
+                            "${e.numeroHabitacion} ${e.tipoHabitacion} - ${e.precioPorNoche}"),
+                      );
+                    }).toList(),
+                    onChanged: (dynamic value) {
+                      selectedRoom = value as String;
                       setState(() {
-                        dateOfInput.text =
-                            formatDate(pickedTime, [dd, '-', mm, '-', yyyy]);
+                        costoHabitacion = uc.listaFinalHabitaciones!
+                            .firstWhere((element) =>
+                                element.numeroHabitacion == selectedRoom)
+                            .precioPorNoche;
+                        actualizarTotal();
+                        print("Habitacion seleccionada: $selectedRoom");
                       });
-                    }
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.calendar_today_rounded,
-                      color: Colors.blueGrey,
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Habitaciones",
+                      prefixIcon: Icon(
+                        Icons.room_preferences_rounded,
+                        color: Colors.blueGrey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
                     ),
-                    labelText: "Fecha de Salida",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
+                    dropdownColor: Colors.white,
                   ),
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedTime2 = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101),
-                    );
-                    if (pickedTime2 != null) {
+
+                  const SizedBox(height: 10),
+
+                  DropdownButtonFormField(
+                    items: sc.listaFinalServicio!.map((e) {
+                      return DropdownMenuItem(
+                        value: e
+                            .nombre, // Supongo que "nombre" es el campo que deseas mostrar
+                        //child: Text(e.nombre),
+                        child: Text("${e.nombre} - ${e.costo}"),
+                      );
+                    }).toList(),
+                    onChanged: (dynamic value) {
+                      selectedServices = value as String;
+
                       setState(() {
-                        dateOfOutput.text =
-                            formatDate(pickedTime2, [dd, '-', mm, '-', yyyy]);
+                        costoServicio = sc.listaFinalServicio!
+                            .firstWhere(
+                                (element) => element.nombre == selectedServices)
+                            .costo;
+
+                        actualizarTotal();
                       });
-                    }
-                  },
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: total,
-                  decoration: InputDecoration(
-                    labelText: "Total a pagar",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                    },
+                    isDense: true,
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      labelText: "Servicios",
+                      prefixIcon: Icon(
+                        Icons.alarm_add,
+                        color: Colors.blueGrey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
+                    dropdownColor: Colors.white,
                   ),
-                  readOnly: true,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    saveReserva(context);
-                    print("Numero de reserva: ${reserveNumber.text}");
-                    print("Habitación seleccionada: $selectedRoom");
-                    print("Servicios: $selectedServices");
-                    print("Fecha de llegada: ${dateOfInput.text}");
-                    print("Fecha de salida: ${dateOfOutput.text}");
-                    print("Número de Personas: ${numberOfPeople.text}");
-                    print("Total: ${total.text}");
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  const SizedBox(height: 10),
+                  // Campo de número de personas
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: "Personas",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
                     ),
-                    elevation: 5,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        numberOfPeople.text = (value);
+                      });
+                    },
                   ),
-                  child: const Text("Registrar"),
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: dateOfInput,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.calendar_today_rounded,
+                        color: Colors.blueGrey,
+                      ),
+                      labelText: "Fecha de Entrada",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? pickedTime = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      print("time: $pickedTime");
+                      if (pickedTime != null) {
+                        setState(() {
+                          dateOfInput.text =
+                              formatDate(pickedTime, [dd, '-', mm, '-', yyyy]);
+                          print("Variable: $dateOfInput");
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.calendar_today_rounded,
+                        color: Colors.blueGrey,
+                      ),
+                      labelText: "Fecha de Salida",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    readOnly: true,
+                    keyboardType: TextInputType.text,
+                    onTap: () async {
+                      DateTime? pickedTime2 = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      print("time: $pickedTime2");
+                      if (pickedTime2 != null) {
+                        setState(() {
+                          dateOfOutput.text =
+                              formatDate(pickedTime2, [dd, '-', mm, '-', yyyy]);
+                          print("Variable: $dateOfInput");
+                        });
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  TextField(
+                    controller: total,
+                    decoration: InputDecoration(
+                      labelText: "Total a pagar",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    readOnly: true,
+                    onChanged: (value) {
+                      setState(() {
+                        total.text = calcularTotal().toString();
+                      });
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+                  // Botón para enviar el formulario
+                  ElevatedButton(
+                    onPressed: () {
+                      saveReserva(context);
+                      // Aquí puedes manejar la información del formulario, por ejemplo, enviarla a una base de datos.
+                      print("Numero de reserva: ${reserveNumber.text}");
+                      print("Habitación seleccionada: ${selectedRoom}");
+                      print("Servicios: ${selectedServices}");
+                      print("Fecha de llegada: ${dateOfInput.text}");
+                      print("Fecha de salida: ${dateOfOutput.text}");
+                      print("Número de Personas: ${numberOfPeople.text}");
+                      print("Total: ${total.text}");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: const Text("Registrar"),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -308,6 +348,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
     var numeroReserva = reserveNumber.text;
     var numeroHabitacionReserva = selectedRoom;
     var numeroPersonasReserva = numberOfPeople.text;
+    var servicios = selectedServices.toString();
     var fechaIngreso = dateOfInput.text;
     var fechaSalida = dateOfOutput.text;
     var totalAPagar = double.parse(total.text);
@@ -316,7 +357,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
       String newReservaId = await ReservasService().saveReservas(
         numeroReserva,
         numeroHabitacionReserva,
-        selectedServices.toString(),
+        servicios,
         numeroPersonasReserva,
         fechaIngreso,
         fechaSalida,

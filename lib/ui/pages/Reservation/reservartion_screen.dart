@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_bella_vista/domain/models/reservation.dart';
 
 class ReservationScreen extends StatelessWidget {
   const ReservationScreen({super.key});

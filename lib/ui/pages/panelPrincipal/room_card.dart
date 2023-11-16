@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/contacto.dart';
-import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservacionesUser.dart';
-import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservation_card.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/serviciosCard.dart';
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/servicios_card.dart';
 
 class CardsView extends StatelessWidget {
   const CardsView({super.key});
@@ -25,10 +25,23 @@ class CardsView extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          const ReservacionesUser(),
+          const ServiciosListaCard(),
           TextEncabezados(
               texto: Text(
             "RESERVACIONES",
+            style: TextStyle(
+                color: Colors.white,
+                backgroundColor: colors.primary,
+                fontSize: 20,
+                fontWeight: FontWeight.w700),
+          )),
+          const SizedBox(
+            height: 10,
+          ),
+          const ServiciosCard(),
+          TextEncabezados(
+              texto: Text(
+            "SERVICIOS",
             style: TextStyle(
                 color: Colors.white,
                 backgroundColor: colors.primary,

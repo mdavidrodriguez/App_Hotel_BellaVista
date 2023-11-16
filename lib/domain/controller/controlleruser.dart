@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hotel_bella_vista/data/services/firebase_auth_services.dart';
 
 class ControlUserAuth extends GetxController {
+   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _response = Rxn();
   final _emailLocal = Rxn();
   final _passwdLocal = Rxn();
@@ -94,6 +96,21 @@ class ControlUserAuth extends GetxController {
 
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+
+ Future<String?> getUserName(String uid) async {
+  try {
+    DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    if (userDoc.exists) {
+      return userDoc.data()?['nombre'];
+    } else {
+      return null; // El usuario no existe
+    }
+  } catch (e) {
+    print('Error al obtener el nombre del usuario: $e');
+    return null;
+  }
+}
 
   dynamic get passwdLocal => _passwdLocal.value;
   dynamic get emailLocal => _emailLocal.value;

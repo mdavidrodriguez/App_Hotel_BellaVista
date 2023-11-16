@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotel_bella_vista/domain/controller/user_services.dart';
+import 'package:hotel_bella_vista/ui/pages/Reservation/lista_reservaciones.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/listaReservas.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/room_card.dart';
 import 'package:hotel_bella_vista/ui/pages/habitacion/listar_habitaciones.dart';
@@ -48,7 +49,7 @@ class _HomeViewState extends State<HomeView> {
     DrawerItem(
       icon: const Icon(Icons.room_service_outlined),
       title: const Text('Reservaciones'),
-      screen: const HabitacionkshelfScreen(),
+      screen:  ListaReservaciones(),
     ),
     DrawerItem(
       icon: const Icon(Icons.supervisor_account_rounded),

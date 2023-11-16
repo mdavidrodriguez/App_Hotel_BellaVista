@@ -4,8 +4,8 @@ import 'package:hotel_bella_vista/domain/controller/servicios_controller.dart';
 import 'package:hotel_bella_vista/domain/models/servicios.dart';
 import 'package:hotel_bella_vista/ui/pages/servicios/detalle_servicio.dart';
 
-class ListadoServicios extends StatelessWidget {
-  const ListadoServicios({super.key});
+class ListarServicios extends StatelessWidget {
+  const ListarServicios({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class ListadoServicios extends StatelessWidget {
     sc.consultarServicio();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Listado de Servicios"),
+        title: const Text("Lista de Servicios"),
         centerTitle: true,
       ),
       body: Obx(() {
@@ -64,7 +64,7 @@ class ListadoServicios extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(sc.listaFinalServicio![posicion].costo
-                                  .toString()),
+                                  .toStringAsFixed(2)),
                             ),
                           ],
                         ),
@@ -77,10 +77,16 @@ class ListadoServicios extends StatelessWidget {
           );
         }
       }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed('/editarservicio');
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
-  getImageWidget(String imagen) {
+  Widget getImageWidget(String imagen) {
     if (imagen.startsWith("http")) {
       return Image.network(imagen, height: 150, width: 150);
     } else {
@@ -88,7 +94,7 @@ class ListadoServicios extends StatelessWidget {
     }
   }
 
-  void _openHabitacionDetails(BuildContext context, servicio) {
+  void _openHabitacionDetails(BuildContext context, ServicioHotel servicio) {
     Navigator.push(
       context,
       MaterialPageRoute(

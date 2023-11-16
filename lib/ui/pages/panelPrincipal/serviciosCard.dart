@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_bella_vista/ui/pages/habitacion/listado_habitaciones.dart';
 
-class ServiciosListaCard extends StatelessWidget {
-  const ServiciosListaCard({super.key});
+
+
+class ServiciosCard extends StatelessWidget {
+  const ServiciosCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +11,9 @@ class ServiciosListaCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ListaHabitaciones()));
+        Navigator.pushNamed(context, '/listarservicios');
       },
-      onHover: (value) => const Text("Habitaciones"),
+      onHover: (value) => const Text("Servicios"),
       child: Center(
         child: Card(
           clipBehavior: Clip.hardEdge,

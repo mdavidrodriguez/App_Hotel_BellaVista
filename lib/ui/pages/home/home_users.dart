@@ -43,12 +43,17 @@ class _HomeViewUserState extends State<HomeViewUser> {
     DrawerItem(
       icon: const Icon(Icons.room_service_outlined),
       title: const Text('Listado Servicios'),
-      screen: const ListadoServicios(),
+      screen: const ListarServicios(),
     ),
     DrawerItem(
-      icon: const Icon(Icons.supervised_user_circle),
+      icon: const Icon(Icons.house_outlined),
       title: const Text('Realizar reserva'),
       screen: const ReservasScreen(),
+    ),
+    DrawerItem(
+      icon: const Icon(Icons.favorite_outline_outlined),
+      title: const Text('Favoritos'),
+      screen: const HabitacionkshelfScreen(),
     ),
   ];
 

@@ -4,7 +4,6 @@ import 'package:hotel_bella_vista/ui/pages/panelPrincipal/contacto.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservacionesUser.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/reservation_card.dart';
 import 'package:hotel_bella_vista/ui/pages/panelPrincipal/servicios_card.dart';
-import 'package:hotel_bella_vista/ui/pages/servicios/listado_servicios.dart';
 
 class CardsViewUser extends StatelessWidget {
   const CardsViewUser({super.key});

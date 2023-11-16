@@ -7,22 +7,24 @@ class ReservaHotel {
   String fechaCheckIn;
   String fechaCheckOut;
   double precioTotal;
+  String uid;
 
   // int ocupacion;
   // List<HistorialReserva> historialReserva;
 
-  ReservaHotel({
-    required this.id,
-    required this.numeroReserva,
-    required this.numeroHabitacion,
-    required this.servicios,
-    required this.numeroPersonas,
-    required this.fechaCheckIn,
-    required this.fechaCheckOut,
-    required this.precioTotal,
-    // required this.ocupacion,
-    // required this.historialReserva,
-  });
+  ReservaHotel(
+      {required this.id,
+      required this.numeroReserva,
+      required this.numeroHabitacion,
+      required this.servicios,
+      required this.numeroPersonas,
+      required this.fechaCheckIn,
+      required this.fechaCheckOut,
+      required this.precioTotal,
+      required this.uid
+      // required this.ocupacion,
+      // required this.historialReserva,
+      });
 
   factory ReservaHotel.desdeDoc(String id, Map<String, dynamic> json) {
     return ReservaHotel(
@@ -34,6 +36,7 @@ class ReservaHotel {
       fechaCheckIn: json["fechaCheckIn"] ?? '',
       fechaCheckOut: json["fechaCheckOut"] ?? '',
       precioTotal: (json["precioTotal"] as num?)?.toDouble() ?? 0.0,
+      uid: json["user"] ?? '',
     );
   }
   toJson() {

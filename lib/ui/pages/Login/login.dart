@@ -122,10 +122,21 @@ class LoginView extends StatelessWidget {
       String? userRole = await _authController.obtenerRolUsuario(userId);
 
       if (userRole != null) {
-        // Validar el rol y dirigir al usuario a la pantalla correspondiente
         if (userRole == 'admin') {
+          Get.snackbar(
+            'Inicio de Sesión Exitoso',
+            '¡Bienvenido, Admin!',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
           Get.offAllNamed('/home');
         } else {
+          Get.snackbar(
+            'Inicio de Sesión Exitoso',
+            '¡Bienvenido, Admin!',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
           Get.offAllNamed('/home_user');
         }
       } else {
@@ -153,7 +164,13 @@ class LoginView extends StatelessWidget {
       UserCredential userCredential = await _authController.ingresarGoogle();
       print(userCredential);
       String usuarior = userCredential.user!.displayName ?? "";
-      Get.offAndToNamed('/home');
+      Get.snackbar(
+        'Inicio de Sesión Exitoso',
+        '¡Bienvenido, Admin!',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      Get.offAndToNamed('/home_user');
     } catch (e) {
       print("Error al iniciar sesión con Google: $e");
       // Manejar el error, mostrar un mensaje, etc.
