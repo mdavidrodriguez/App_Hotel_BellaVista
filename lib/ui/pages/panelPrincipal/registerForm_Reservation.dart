@@ -306,6 +306,16 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                         if (value == null || value.isEmpty) {
                           return "Por favor seleccione la fecha de salida";
                         }
+                        print("fechaENTRADA --> ${dateOfInput.text}");
+                        print("fechaSALIDA --> ${dateOfOutput.text}");
+                        var comparar =
+                            dateOfOutput.text.compareTo(dateOfInput.text);
+                        print("comparar ----> $comparar");
+                        if (comparar.isEqual(0)) {
+                          return "";
+                        } else if (comparar.isEqual(-1)) {
+                          return "";
+                        }
                         return null;
                       },
                       onTap: () async {
@@ -327,8 +337,13 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                         print("time: $pickedTime2");
                         if (pickedTime2 != null) {
                           setState(() {
+                            
+                            dateOfOutput.text = formatDate(
+                                pickedTime2, [dd, '-', mm, '-', yyyy]);
+                            print("Variable: $dateOfOutput.text");
+
                             print("fechaENTRADA --> ${dateOfInput.text}");
-                            print("fechaSALIDA --> ${dateOfOutput.text}");
+                            print("fechaSALIDA --> ${pickedTime2}");
                             var comparar =
                                 dateOfOutput.text.compareTo(dateOfInput.text);
                             print("comparar ----> $comparar");
@@ -341,10 +356,9 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                                   "La fecha de salida no debe ser menor a la de entrada");
                               return;
                             }
-                            dateOfOutput.text = formatDate(
-                                pickedTime2, [dd, '-', mm, '-', yyyy]);
-                            print("Variable: $dateOfInput");
                           });
+
+                          
                         }
                       },
                     ),
