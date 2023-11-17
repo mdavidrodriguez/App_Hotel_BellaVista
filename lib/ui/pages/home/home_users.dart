@@ -76,7 +76,7 @@ class _HomeViewUserState extends State<HomeViewUser> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: colors.primary,
         title: const Text(
-          'Vista User',
+          'Bella Vista',
           style: TextStyle(color: Colors.white),
         ),
         elevation: 0,
@@ -184,7 +184,7 @@ class _HomeViewUserState extends State<HomeViewUser> {
                 ),
                 GButton(
                   icon: Icons.meeting_room,
-                  text: 'Reservas',
+                  text: 'Favoritos',
                 ),
                 GButton(
                   icon: Icons.home,

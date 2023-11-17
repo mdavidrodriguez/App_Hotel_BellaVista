@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:hotel_bella_vista/data/services/habitacionesService.dart';
 import 'package:hotel_bella_vista/data/state/state.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
@@ -17,8 +18,8 @@ class HabitacionkshelfScreen extends StatelessWidget {
           var widget = habitacionshelfState.habIds.isEmpty
               ? Center(
                   child: Text(
-                    'Aun no tienes ninguna reserva realizada',
-                    style: Theme.of(context).textTheme.headline4,
+                    'Aun No tiene Habitaciones Favoritas Agregadas',
+                    style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
                 )
@@ -28,9 +29,9 @@ class HabitacionkshelfScreen extends StatelessWidget {
               Expanded(child: widget),
               ElevatedButton(
                 onPressed: () {
-                  _navigateToAddBookScreen(context);
+                  Get.toNamed('/listahabitaciones');
                 },
-                child: const Text('Agregar una habitacion'),
+                child: const Text('Agregar favoritos ❤️'),
               ),
             ],
           );

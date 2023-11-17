@@ -179,7 +179,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 GButton(
                   icon: Icons.meeting_room,
-                  text: 'Reservas',
+                  text: 'Favoritos',
                 ),
                 GButton(
                   icon: Icons.home,

@@ -78,10 +78,10 @@ class ListarServicios extends StatelessWidget {
         }
       }),
       floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.arrow_back_ios_new_rounded),
         onPressed: () {
-          Get.toNamed('/editarservicio');
+          Navigator.pop(context);
         },
-        child: const Icon(Icons.add),
       ),
     );
   }

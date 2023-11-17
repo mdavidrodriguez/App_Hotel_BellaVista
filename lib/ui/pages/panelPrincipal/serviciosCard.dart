@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class ServiciosCard extends StatelessWidget {
   const ServiciosCard({super.key});
 
@@ -29,7 +27,7 @@ class ServiciosCard extends StatelessWidget {
           child: Stack(
             children: [
               Image.asset(
-                'assets/images/reserva-legal.png',
+                'assets/images/servicios.jpg',
                 fit: BoxFit.cover,
                 width: 300,
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Importa shared_preferences
 import 'package:hotel_bella_vista/data/state/state.dart';
 import 'package:hotel_bella_vista/domain/models/habitacion.dart';
 
@@ -18,16 +19,17 @@ class HabitacionDetailsScreen extends StatelessWidget {
           children: [
             HabitacionCoverWidget(coverUrl: habitacion.imagenes),
             HabitacionInfoWidget(
-                tipohabitacion:
-                    "Tipo de habitación: ${habitacion.tipoHabitacion}",
-                capacidad:
-                    "Capacidad de personas: ${habitacion.capacidad.toString()}",
-                precioNoche:
-                    "Precio por Noche: ${habitacion.precioPorNoche.toString()}",
-                numeroHabitacion:
-                    "Numero de habitación: ${habitacion.numeroHabitacion}",
-                comodidades: "Comodidades: ${habitacion.comodidades}",
-                descripcion: "Descripción: ${habitacion.descripcion}"),
+              tipohabitacion:
+                  "Tipo de habitación: ${habitacion.tipoHabitacion}",
+              capacidad:
+                  "Capacidad de personas: ${habitacion.capacidad.toString()}",
+              precioNoche:
+                  "Precio por Noche: ${habitacion.precioPorNoche.toString()}",
+              numeroHabitacion:
+                  "Numero de habitación: ${habitacion.numeroHabitacion}",
+              comodidades: "Comodidades: ${habitacion.comodidades}",
+              descripcion: "Descripción: ${habitacion.descripcion}",
+            ),
             HabActionWidget(habitacionId: habitacion.id)
           ],
         ),
@@ -43,30 +45,45 @@ class HabActionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HabshelfBloc, HabitacionShelState>(
-        builder: (context, HabitacionShelState) {
-      if (HabitacionShelState.habIds.contains(habitacionId)) {
-        return ElevatedButton(
+      builder: (context, HabitacionShelState) {
+        if (HabitacionShelState.habIds.contains(habitacionId)) {
+          return ElevatedButton(
             onPressed: () {
               _removeFromHabshelf(context, habitacionId);
             },
-            child: const Text('Quitar'));
-      }
-      return ElevatedButton(
+            child: const Text('Quitar'),
+          );
+        }
+        return ElevatedButton(
           onPressed: () {
             _addToHashelf(context, habitacionId);
           },
-          child: const Text('Agregar'));
-    });
+          child: const Text('Agregar'),
+        );
+      },
+    );
   }
 
-  void _addToHashelf(BuildContext context, String habitacionId) {
+  void _addToHashelf(BuildContext context, String habitacionId) async {
     var habitacionshelBloc = context.read<HabshelfBloc>();
     habitacionshelBloc.add(AddHabiToHabshelf(habitacionId));
+
+    // Guardar en SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> favoritos = prefs.getStringList('favoritos') ?? [];
+    favoritos.add(habitacionId);
+    prefs.setStringList('favoritos', favoritos);
   }
 
-  void _removeFromHabshelf(BuildContext context, String habitacionId) {
+  void _removeFromHabshelf(BuildContext context, String habitacionId) async {
     var habitacionshelBloc = context.read<HabshelfBloc>();
     habitacionshelBloc.add(RemoveHabFromHabshelf(habitacionId));
+
+    // Eliminar de SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> favoritos = prefs.getStringList('favoritos') ?? [];
+    favoritos.remove(habitacionId);
+    prefs.setStringList('favoritos', favoritos);
   }
 }
 
@@ -81,9 +98,10 @@ class HabitacionCoverWidget extends StatelessWidget {
       width: 400,
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 5,
-            blurRadius: 10)
+          color: Colors.grey.withOpacity(0.2),
+          spreadRadius: 5,
+          blurRadius: 10,
+        )
       ]),
       child: getImageWidget(coverUrl),
     );

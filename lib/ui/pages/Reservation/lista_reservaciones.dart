@@ -55,6 +55,12 @@ class ListaReservaciones extends StatelessWidget {
           );
         }
       }),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.arrow_back_ios_new_rounded),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 

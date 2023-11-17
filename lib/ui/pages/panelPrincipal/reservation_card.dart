@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:hotel_bella_vista/ui/pages/panelPrincipal/registerForm_Reservation.dart';
 
 class ReservationCard extends StatelessWidget {
   const ReservationCard({super.key});
@@ -11,9 +10,13 @@ class ReservationCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/reservation/register');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ReservasScreen(),
+            ));
       },
-      onHover: (value) => const Text("Habitaciones"),
+      onHover: (value) => const Text("Reservaciones"),
       child: Center(
         child: Card(
           clipBehavior: Clip.hardEdge,

@@ -125,7 +125,7 @@ class LoginView extends StatelessWidget {
         if (userRole == 'admin') {
           Get.snackbar(
             'Inicio de Sesión Exitoso',
-            '¡Bienvenido, Admin!',
+            '¡Bienvenido}!',
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
@@ -133,7 +133,7 @@ class LoginView extends StatelessWidget {
         } else {
           Get.snackbar(
             'Inicio de Sesión Exitoso',
-            '¡Bienvenido, Admin!',
+            '¡Bienvenido!',
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
@@ -166,7 +166,7 @@ class LoginView extends StatelessWidget {
       String usuarior = userCredential.user!.displayName ?? "";
       Get.snackbar(
         'Inicio de Sesión Exitoso',
-        '¡Bienvenido, Admin!',
+        '¡Bienvenido, ${userCredential.user!.displayName} !',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );

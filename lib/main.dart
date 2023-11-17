@@ -11,16 +11,6 @@ import 'package:hotel_bella_vista/ui/app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-/*   GetPlatform.isWeb
-      ? await Firebase.initializeApp(
-          options: const FirebaseOptions(
-              apiKey: "AIzaSyDELZkJd10YfaX_riPF-bSuB29_oBbSpwc",
-              authDomain: "hotelbellavista-e9e72.firebaseapp.com",
-              projectId: "hotelbellavista-e9e72",
-              storageBucket: "hotelbellavista-e9e72.appspot.com",
-              messagingSenderId: "942578221527",
-              appId: "1:942578221527:web:420b864629f47d82ef8b92"))
-      : await Firebase.initializeApp(); */
   Get.put(ConsultasHabitacionController());
   Get.put(ConsultasServiciosController());
   Get.put(ConsultasReservasController());

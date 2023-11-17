@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_bella_vista/ui/pages/Reservation/lista_reservaciones_user.dart';
 
 class ReservacionesUser extends StatelessWidget {
   const ReservacionesUser({super.key});
@@ -9,7 +10,11 @@ class ReservacionesUser extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/reservashelf');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ListaReservacionesUser(),
+            ));
       },
       onHover: (value) => const Text("Reservas"),
       child: Center(
@@ -27,7 +32,7 @@ class ReservacionesUser extends StatelessWidget {
           child: Stack(
             children: [
               Image.asset(
-                'assets/images/reserva-legal.png',
+                'assets/images/reservaciones.png',
                 fit: BoxFit.cover,
                 width: 300,
               ),
