@@ -119,8 +119,10 @@ class _HomeViewUserState extends State<HomeViewUser> {
                                     height: 100,
                                     fit: BoxFit.cover,
                                   )
-                                : Image.asset(
-                                    'assets/images/camara.jpeg', // ajusta la ruta del asset según tu estructura de carpetas
+                                : Image.network(
+                                    sc.listafinal![index].imagen.isNotEmpty
+                                        ? sc.listafinal![index].imagen
+                                        : 'https://firebasestorage.googleapis.com/v0/b/hotelbellavista-e9e72.appspot.com/o/servicios%2Foik8H8MQzNbGV7dkPezjpnwi3AC2.png?alt=media&token=6e1ffe0b-be3d-4fd8-9c87-52297d09d4a4',
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.cover,
@@ -132,7 +134,7 @@ class _HomeViewUserState extends State<HomeViewUser> {
                       Text(
                         isGoogleSignIn
                             ? FirebaseAuth.instance.currentUser!.displayName!
-                            : "${sc.listafinal![index].nombre} - ${sc.listafinal![index].apellido}",
+                            : "${sc.listafinal![index].nombre} ${sc.listafinal![index].apellido}",
                         style:
                             const TextStyle(color: Colors.white, fontSize: 25),
                       ),

@@ -41,6 +41,7 @@ class UserscreenState extends State<Userscreen> {
         setState(() {
           _newImageFile = null;
           _image = NetworkImage(imageUrl);
+          sc.consultarServicio();
         });
       }
     }
