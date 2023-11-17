@@ -69,8 +69,8 @@ class _ReservasRegisterState extends State<ReservasRegister> {
     });
   }
 
-  // final _formKey = GlobalKey<FormState>();
-  // bool _saving_habitacion = false;
+  final _formKey = GlobalKey<FormState>();
+  bool _saving_reserva = false;
 
   @override
   void initState() {
@@ -87,11 +87,16 @@ class _ReservasRegisterState extends State<ReservasRegister> {
     ConsultasHabitacionController uc = Get.find();
     uc.consultarHabitaciones();
 
+    ConsultasReservasController rc = Get.find();
+    rc.consultarServicio();
+
     print(sc.listaFinalServicio);
 
     return Scaffold(
-      body: Stack(
-        children: [
+      body: Form(
+        key: _formKey,
+        child: Stack(
+          children: [
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -103,11 +108,13 @@ class _ReservasRegisterState extends State<ReservasRegister> {
           SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
+              
               child: Column(
+
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Campo de número de habitación
-                  TextField(
+                  TextFormField(
                     controller: reserveNumber,
                     decoration: InputDecoration(
                       labelText: "Numero de reserva",
@@ -127,6 +134,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                   const SizedBox(height: 10),
 
                   DropdownButtonFormField(
+
                     items: uc.listaFinalHabitaciones!.map((e) {
                       return DropdownMenuItem(
                         value: e
@@ -160,6 +168,12 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                       fillColor: Colors.white,
                     ),
                     dropdownColor: Colors.white,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor seleccione una habitacion";
+                      }
+                      return null;
+                    },
                   ),
 
                   const SizedBox(height: 10),
@@ -167,8 +181,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                   DropdownButtonFormField(
                     items: sc.listaFinalServicio!.map((e) {
                       return DropdownMenuItem(
-                        value: e
-                            .nombre, // Supongo que "nombre" es el campo que deseas mostrar
+                        value: e.nombre,
                         //child: Text(e.nombre),
                         child: Text("${e.nombre} - ${e.costo}"),
                       );
@@ -184,6 +197,12 @@ class _ReservasRegisterState extends State<ReservasRegister> {
 
                         actualizarTotal();
                       });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor seleccione un servicio";
+                      }
+                      return null;
                     },
                     isDense: true,
                     isExpanded: true,
@@ -203,7 +222,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                   ),
                   const SizedBox(height: 10),
                   // Campo de número de personas
-                  TextField(
+                  TextFormField(
                     decoration: InputDecoration(
                       labelText: "Personas",
                       border: OutlineInputBorder(
@@ -218,9 +237,15 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                         numberOfPeople.text = (value);
                       });
                     },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por digite el numero de personas";
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 20),
-                  TextField(
+                  TextFormField(
                     controller: dateOfInput,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(
@@ -234,12 +259,18 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                       filled: true,
                       fillColor: Colors.white,
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor seleccione la fecha de entrada";
+                      }
+                      return null;
+                    },
                     readOnly: true,
                     onTap: () async {
                       DateTime? pickedTime = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
+                        firstDate: DateTime.now(),
                         lastDate: DateTime(2101),
                       );
                       print("time: $pickedTime");
@@ -253,7 +284,8 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  TextField(
+                  TextFormField(
+                    controller: dateOfOutput,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(
                         Icons.calendar_today_rounded,
@@ -267,14 +299,24 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                       fillColor: Colors.white,
                     ),
                     readOnly: true,
-                    keyboardType: TextInputType.text,
+                    
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor seleccione la fecha de salida";
+                      }
+                      return null;
+                    },
+                    
                     onTap: () async {
+                      DateTime? fechaMasUnDia =
+                          DateTime.now().add(const Duration(days: 1));
                       DateTime? pickedTime2 = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
+                        initialDate: fechaMasUnDia,
+                        firstDate: fechaMasUnDia,
                         lastDate: DateTime(2101),
                       );
+
                       print("time: $pickedTime2");
                       if (pickedTime2 != null) {
                         setState(() {
@@ -288,7 +330,7 @@ class _ReservasRegisterState extends State<ReservasRegister> {
 
                   const SizedBox(height: 10),
 
-                  TextField(
+                  TextFormField(
                     controller: total,
                     decoration: InputDecoration(
                       labelText: "Total a pagar",
@@ -310,8 +352,10 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                   // Botón para enviar el formulario
                   ElevatedButton(
                     onPressed: () {
-                      saveReserva(context);
+                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+                        
                       // Aquí puedes manejar la información del formulario, por ejemplo, enviarla a una base de datos.
+                      saveReserva(context);
                       print("Numero de reserva: ${reserveNumber.text}");
                       print("Habitación seleccionada: ${selectedRoom}");
                       print("Servicios: ${selectedServices}");
@@ -319,6 +363,10 @@ class _ReservasRegisterState extends State<ReservasRegister> {
                       print("Fecha de salida: ${dateOfOutput.text}");
                       print("Número de Personas: ${numberOfPeople.text}");
                       print("Total: ${total.text}");
+                      }
+                      
+                      
+                      
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -333,6 +381,9 @@ class _ReservasRegisterState extends State<ReservasRegister> {
             ),
           ),
         ],
+        ),
+
+        
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.arrow_back_ios_new_rounded),
